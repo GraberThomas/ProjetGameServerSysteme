@@ -10,11 +10,11 @@ int send_string(int fd, char *str){
     if(! str ) return 3;
     int len = strlen(str);
     if(write(fd, &len, sizeof(int)) < 0){
-        perror("write");
+        perror("write length");
         return 1;
     }
     if(write(fd, str, len*sizeof(char)) < 0){
-        perror("write");
+        perror("write str");
         return 2;
     }
     return 0;
@@ -44,11 +44,11 @@ char *recv_string(int fd) {
 int send_argv(int fd, char *argv[]){
     int argc = 0;
     char **oldArgv = argv;
+    //count the size of table argv
     while( *oldArgv != NULL){
         argc++;
         oldArgv+=1;
     }
-    fprintf(stdout,"ARGC = %d\n", argc);
     if(argc == 0){
         return 4;
     }
@@ -72,7 +72,7 @@ char **recv_argv(int fd) {
         perror("read");
         return NULL;
     }
-    len++;
+    len++; //A place for NULL in the end of argv
     char **argv = calloc(sizeof(char *), len);
     if(argv == NULL){
         perror("calloc");
