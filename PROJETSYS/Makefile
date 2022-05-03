@@ -1,33 +1,64 @@
-PATH_LIBS=./libs
+PATH_OUT=./out
+PATH_LIBS=libs
+PATH_LIB_OUT=$(PWD)/${PATH_OUT}/${PATH_LIBS}
+PATH_SRC=./src
 CC=gcc
 CFLAGS=-Wall -std=c99 -g
 LDFLAGS=-g
 
-all : server client
 
-client : client.o $(PATH_LIBS)/libmessage.so $(PATH_LIBS)/libprojectUtil.so
-	$(CC) $(LDFLAGS) -L${PWD}/libs/ -o client client.o -lmessage -lprojectUtil
 
-server : server.o $(PATH_LIBS)/libmessage.so $(PATH_LIBS)/libprojectUtil.so
-	$(CC) $(LDFLAGS) -L${PWD}/libs/ -o server server.o -lmessage -lprojectUtil
+all : create_folders server client
 
-client.o : client.c
-	$(CC) $(CFLAGS) -c -o client.o client.c 
+create_folders : 
+	mkdir -p ${PATH_LIB_OUT}
+	mkdir -p ${PATH_LIB_OUT}/libmessage
+	mkdir -p ${PATH_LIB_OUT}/libprojectUtil
+	mkdir -p ${PATH_OUT}/game
 
-server.o : server.c
-	$(CC) $(CFLAGS) -c -o server.o server.c
+# Server dependencies
+server : $(PATH_OUT)/server.o $(PATH_LIB_OUT)/libmessage.so $(PATH_LIB_OUT)/libprojectUtil.so
+	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $^ -lmessage -lprojectUtil
 
-libs/libprojectUtil.so : $(PATH_LIBS)/libprojectUtil/projectUtil.o
-	$(CC) $(LDFLAGS) -shared -o $(PATH_LIBS)/libprojectUtil.so $(PATH_LIBS)/libprojectUtil/projectUtil.o
+# Client dependencies
+client : $(PATH_OUT)/client.o $(PATH_LIB_OUT)/libmessage.so $(PATH_LIB_OUT)/libprojectUtil.so
+	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $^ -lmessage -lprojectUtil
 
-libs/libprojectUtil/projectUtil.o : $(PATH_LIBS)/libprojectUtil/projectUtil.c
-	$(CC) $(CFLAGS) -fPIC -c -o $(PATH_LIBS)/libprojectUtil/projectUtil.o $(PATH_LIBS)/libprojectUtil/projectUtil.c
 
-libs/libmessage.so : $(PATH_LIBS)/libmessage/libmessage.o
-	$(CC) $(LDFLAGS) -shared -o $(PATH_LIBS)/libmessage.so $(PATH_LIBS)/libmessage/libmessage.o 
 
-libs/libmessage/libmessage.o : $(PATH_LIBS)/libmessage/message.c $(PATH_LIBS)/libmessage/message.h
-	$(CC) $(CFLAGS) -fPIC -c -o $(PATH_LIBS)/libmessage/libmessage.o $(PATH_LIBS)/libmessage/message.c 
 
-clean :
-	rm -f *.o *.so $(PATH_LIBS)/libmessage/*.o $(PATH_LIBS)/*.so $(PATH_LIBS)/libprojectUtil/*.o 
+#build the shared libraries
+$(PATH_LIB_OUT)/libmessage.so : $(PATH_LIB_OUT)/libmessage/libmessage.o
+	$(CC) $(LDFLAGS) -shared -o $(PATH_LIB_OUT)/libmessage.so $(PATH_LIB_OUT)/libmessage/libmessage.o
+
+
+$(PATH_LIB_OUT)/libprojectUtil.so : $(PATH_LIB_OUT)/libprojectUtil/projectUtil.o
+	$(CC) $(LDFLAGS) -shared -o $(PATH_LIB_OUT)/libprojectUtil.so $(PATH_LIB_OUT)/libprojectUtil/projectUtil.o
+
+
+
+
+#build the .o files
+$(PATH_OUT)/server.o : $(PATH_SRC)/server.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+
+$(PATH_OUT)/client.o : $(PATH_SRC)/client.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+
+$(PATH_LIB_OUT)/libmessage/libmessage.o : $(PATH_SRC)/$(PATH_LIBS)/libmessage/message.c $(PATH_SRC)/$(PATH_LIBS)/libmessage/message.h
+	$(CC) $(CFLAGS) -fPIC -c -o $@ $<
+
+
+$(PATH_LIB_OUT)/libprojectUtil/projectUtil.o : $(PATH_SRC)/$(PATH_LIBS)/libprojectUtil/projectUtil.c $(PATH_SRC)/$(PATH_LIBS)/libprojectUtil/projectUtil.h
+	$(CC) $(CFLAGS) -fPIC -c -o $@ $<
+
+
+clean : 
+	rm -rf $(PATH_OUT)
+
+mrproper :
+	rm -f client
+	rm -f server
+
