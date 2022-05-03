@@ -2,6 +2,9 @@
     "files.associations": {
         "string.h": "c",
         "types.h": "c",
-        "unistd.h": "c"
+        "unistd.h": "c",
+        "message.h": "c",
+        "errno.h": "c",
+        "projectutil.h": "c"
     }
 }
