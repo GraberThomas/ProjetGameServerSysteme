@@ -44,7 +44,8 @@ void handler_usr1(int sig){
 
 //handler for SIGUSR2
 void handler_usr2(int sig){
-    printf("SIGUSR2 received\n");
+    write(1,"An server error occured\n", 25);
+    exit(20);
 }
 
 int main(int argc, char **argv){
@@ -72,12 +73,12 @@ int main(int argc, char **argv){
     }
     struct sigaction actSigUsr1;
     struct sigaction actSigUsr2;
-    actSigUsr1.sa_handler = handler_usr1;
-    actSigUsr2.sa_handler = handler_usr2;
     sigemptyset(&actSigUsr1.sa_mask);
     sigemptyset(&actSigUsr2.sa_mask);
     actSigUsr1.sa_flags = 0;
     actSigUsr2.sa_flags = 0;
+    actSigUsr1.sa_handler = handler_usr1;
+    actSigUsr2.sa_handler = handler_usr2;
     if(sigaction(SIGUSR1, &actSigUsr1, NULL) == -1){
         fprintf(stderr, "Error while setting the handler for SIGUSR1\n");
         perror("sigaction");

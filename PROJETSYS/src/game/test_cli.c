@@ -38,6 +38,5 @@ int main(){
     fprintf(stderr, "Error send_string \"client to server\"\n");
     exit(1);
   }
-  
   return 0;
 }

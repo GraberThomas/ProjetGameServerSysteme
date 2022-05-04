@@ -16,6 +16,7 @@
 #include "libs/libprojectUtil/projectUtil.h"
 
 volatile int usr1_receive = 0;
+int pid_client;
 
 /**
     * @brief Check if the given file exists
@@ -28,11 +29,6 @@ int checkIfFileExists(const char* filename){
         return 1;
     else  
         return 0;
-}
-
-void handSIGUSR1(int sig) {
-    write(1, "SIGUSR1 received\n", 18);
-    usr1_receive = 1;
 }
 
 /**
@@ -50,14 +46,35 @@ int serv_exit(int error, char *msg) {
     exit(error);
 }
 
+void handSIGUSR1(int sig) {
+    write(1, "SIGUSR1 received\n", 18);
+    usr1_receive = 1;
+}
+
+//handler for sigint
+void handSIGINT(int sig){
+    printf("PID DU CLIENT: %d\n", pid_client);
+    if(pid_client != 0){
+        if(kill(pid_client,SIGUSR2) == -1 && errno != ESRCH){
+            perror("kill");
+        }
+    }
+    serv_exit(0, "\nServer interrupted by user\n");
+}
+
 int main(int argc, char **argv){
-    struct sigaction temp;
-    sigemptyset(&temp.sa_mask);
-    temp.sa_flags = 0;
-    temp.sa_handler = SIG_IGN;
-    sigaction(SIGPIPE, &temp, NULL);
     if(checkIfFileExists(SERVER_PID_FILE)){
-        serv_exit(1, "Server already running !\n");
+        fprintf(stderr, "The server is already running\n");
+        exit(1);
+    }
+    struct sigaction actINT;
+    sigemptyset(&actINT.sa_mask);
+    actINT.sa_flags = 0;
+    actINT.sa_handler = handSIGINT;
+    if(sigaction(SIGINT, &actINT, NULL) == -1){
+        write(2, "Error setting SIGINT handler\n", 27);
+        perror("sigaction");
+        serv_exit(1, "Error setting SIGINT handler\n");
     }
     int fd_fifo_game_server_pid = open(SERVER_PID_FILE,O_CREAT|O_WRONLY, 000774);
     if(fd_fifo_game_server_pid == -1){
@@ -95,8 +112,6 @@ int main(int argc, char **argv){
         perror("sigaction");
         serv_exit(7, "Error while setting the signal handler\n");
     }
-
-    int pid_client;
     int fd_fifo;
     int childResult;
     size_t size_path;
@@ -201,8 +216,7 @@ int main(int argc, char **argv){
                         perror("dup2");
                         serv_exit(13, "Error while duplicating the pipe 0 to stdout\n");
                     }
-                    int res2 = dup2(fd_1, 1);
-                    if(res2 == -1){
+                    if(dup2(fd_1, 1) == -1){
                         fprintf(stderr, "Error while duplicate the pipe 1 to stdout\n");
                         perror("dup2");
                     }
