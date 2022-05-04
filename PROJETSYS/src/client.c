@@ -90,15 +90,15 @@ int main(int argc, char **argv){
     }
     // TODO: sigprocmask to block SIGUSR1 and SIGUSR2
     //block sigUSR1
-    sigset_t set;
-    sigset_t oldset;
-    sigemptyset(&set);
-    sigaddset(&set, SIGUSR1);
-    if(sigprocmask(SIG_BLOCK, &set, &oldset) == -1){
-        fprintf(stderr, "Error while blocking SIGUSR1\n");
-        perror("sigprocmask");
-        exit(10);
-    }
+    // sigset_t set;
+    // sigset_t oldset;
+    // sigemptyset(&set);
+    // sigaddset(&set, SIGUSR1);
+    // if(sigprocmask(SIG_BLOCK, &set, &oldset) == -1){
+    //     fprintf(stderr, "Error while blocking SIGUSR1\n");
+    //     perror("sigprocmask");
+    //     exit(10);
+    // }
     kill(pid_server, SIGUSR1);
     int fd_fifo = open(GAME_FIFO, O_WRONLY);
     if(fd_fifo == -1){
@@ -129,13 +129,46 @@ int main(int argc, char **argv){
         }
     }
     
-    //wait with sugspend for SIGUSR1
-    sigsuspend(&set);
-    //restore sigUSR1
-    if(sigprocmask(SIG_SETMASK, &oldset, NULL) == -1){
-        fprintf(stderr, "Error while restoring SIGUSR1\n");
-        perror("sigprocmask");
-        exit(11);
-    }
+    // //wait with sugspend for SIGUSR1
+    // sigsuspend(&set);
+    // //restore sigUSR1
+    // if(sigprocmask(SIG_SETMASK, &oldset, NULL) == -1){
+    //     fprintf(stderr, "Error while restoring SIGUSR1\n");
+    //     perror("sigprocmask");
+    //     exit(11);
+    // }
+    pause();
 
+    printf("Je continue\n");
+    fprintf(stdout,"%s\n%s\n", getPathFIFO(pid_client, 0), getPathFIFO(pid_client, 1));
+    int fd0 = open(getPathFIFO(pid_client, 0), O_WRONLY);
+    if(fd0 == -1){
+        fprintf(stderr, "Error while opening the fifo\n");
+        perror("open");
+        exit(16);
+    }
+    int fd1 = open(getPathFIFO(pid_client, 1), O_RDONLY);
+    if(fd1 == -1){
+        fprintf(stderr, "Error while opening the fifo\n");
+        perror("open");
+        exit(17);
+    }
+    if(dup2(fd0, 3) == -1){
+        fprintf(stderr, "Error while duplicating the file descriptor\n");
+        perror("dup2");
+        exit(18);
+    }
+    close(fd0);
+    if(dup2(fd1, 4) == -1){
+        fprintf(stderr, "Error while duplicating the file descriptor\n");
+        perror("dup2");
+        exit(19);
+    }
+    close(fd1);
+    printf("fd0 : %d , fd1 : %d", fd0, fd1);
+    // close(fd_fifo);
+    // close(fd_pid);
+    fprintf(stdout,"Je recouvre\n");
+    execvp("./out/game/test_cli", argv+1);
+    fprintf(stdout, "Error while executing the game\n");
 }

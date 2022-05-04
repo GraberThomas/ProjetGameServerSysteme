@@ -12,9 +12,11 @@ int main(int argc, char *argv[]){
   for(int i = 0; i < argc; ++i){
     fprintf(stderr, "argv[%d]  = %s\n", i, argv[i]);
   }
-  
+  fprintf(stderr, "yo\n");
   // send "server to client" to the client
   int r1 = send_string(1, "server to client");
+  fprintf(stderr, "yo2\n");
+
   if (r1 < 0){
     fprintf(stderr, "Error send_string \"server to client\"\n");
     exit(1);

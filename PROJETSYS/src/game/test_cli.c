@@ -14,7 +14,6 @@
 // the standard file descriptors (0, 1 et 2) are associated to the launch terminal
 
 int main(){
-  
   // receive a string from the server
   char *res = recv_string(SERV_IN_FILENO);
   if (!res){

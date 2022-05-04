@@ -51,6 +51,11 @@ int serv_exit(int error, char *msg) {
 }
 
 int main(int argc, char **argv){
+    struct sigaction temp;
+    sigemptyset(&temp.sa_mask);
+    temp.sa_flags = 0;
+    temp.sa_handler = SIG_IGN;
+    sigaction(SIGPIPE, &temp, NULL);
     if(checkIfFileExists(SERVER_PID_FILE)){
         serv_exit(1, "Server already running !\n");
     }
@@ -164,22 +169,15 @@ int main(int argc, char **argv){
                         argv_game = NULL;
                     }
                     printf("game name : %s\n", gameName);
-                    size_t size_path_pipes = strlen(PATH_FIFO) + strlen(itoa(pid_client)) + strlen("_0");
-                    char *pathPipe0 = malloc(sizeof(char) * (size_path_pipes + 1));
-                    strcpy(pathPipe0, PATH_FIFO);
-                    strcat(pathPipe0, itoa(pid_client));
-                    strcat(pathPipe0, "_0");
-                    pathPipe0[size_path_pipes] = '\0';
-                    char *pathPipe1 = malloc(sizeof(char) * (size_path_pipes + 1));
-                    strcpy(pathPipe1, PATH_FIFO);
-                    strcat(pathPipe1, itoa(pid_client));
-                    strcat(pathPipe1, "_1");
-                    pathPipe1[size_path_pipes] = '\0';
-                    if(mkfifo(pathPipe0, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP) != 0){
+                    char *pathPipe0 = getPathFIFO(pid_client, 0);
+                    char *pathPipe1 = getPathFIFO(pid_client, 1);
+                    printf("pathPipe0 : %s\n", pathPipe0);
+                    printf("pathPipe1 : %s\n", pathPipe1);
+                    if(mkfifo(pathPipe0, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP | S_IROTH) != 0){
                         perror("mkfifo");
                         serv_exit(11, "Error while creating the pipes\n");
                     }
-                    if(mkfifo(pathPipe1, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP) != 0){
+                    if(mkfifo(pathPipe1, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP | S_IROTH) != 0){
                         perror("mkfifo");
                         serv_exit(11, "Error while creating the pipes\n");
                     }
@@ -198,8 +196,18 @@ int main(int argc, char **argv){
                         perror("open");
                         serv_exit(12, "Error while opening the pipe\n");
                     }
-                    dup2(fd_0, 0);
-                    dup2(fd_1, 1);
+                    printf(" fd_0 : %d, fd_1 : %d\n", fd_0, fd_1);
+                    if(dup2(fd_0, 0) != 0){
+                        fprintf(stderr, "Error while duplicate the pipe 0 to stdout\n");
+                        perror("dup2");
+                    }
+                    int res2 = dup2(fd_1, 1);
+                    if(res2 != 0){
+                        fprintf(stderr, "%d\n", res2);
+                        fprintf(stderr, "%d" , errno);
+                        fprintf(stderr, "Error while duplicate the pipe 1 to stdout\n");
+                        perror("dup2");
+                    }
                     close(fd_0);
                     close(fd_1);
                     execv(gamePath, argv_game);

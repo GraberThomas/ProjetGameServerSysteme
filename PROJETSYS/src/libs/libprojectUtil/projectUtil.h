@@ -7,3 +7,6 @@
 
 //convert an int to a string
 char *itoa(int i);
+
+//get the path of the fifo
+char *getPathFIFO(int pid, int id);
