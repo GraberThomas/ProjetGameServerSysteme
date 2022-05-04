@@ -198,13 +198,11 @@ int main(int argc, char **argv){
                     }
                     printf(" fd_0 : %d, fd_1 : %d\n", fd_0, fd_1);
                     if(dup2(fd_0, 0) != 0){
-                        fprintf(stderr, "Error while duplicate the pipe 0 to stdout\n");
                         perror("dup2");
+                        serv_exit(13, "Error while duplicating the pipe 0 to stdout\n");
                     }
                     int res2 = dup2(fd_1, 1);
-                    if(res2 != 0){
-                        fprintf(stderr, "%d\n", res2);
-                        fprintf(stderr, "%d" , errno);
+                    if(res2 == -1){
                         fprintf(stderr, "Error while duplicate the pipe 1 to stdout\n");
                         perror("dup2");
                     }
@@ -231,6 +229,8 @@ int main(int argc, char **argv){
                 printf("continued\n");
             }
             usr1_receive = 0;
+            unlink(getPathFIFO(pid_client, 0));
+            unlink(getPathFIFO(pid_client, 1));
         }
     }
     return 0;

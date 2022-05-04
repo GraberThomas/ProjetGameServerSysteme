@@ -13,10 +13,10 @@ LDFLAGS=-g
 all : create_folders server client $(PATH_GAME_OUT)/test_serv $(PATH_GAME_OUT)/test_cli
 
 create_folders : 
-	mkdir -p ${PATH_LIB_OUT}
-	mkdir -p ${PATH_LIB_OUT}/libmessage
-	mkdir -p ${PATH_LIB_OUT}/libprojectUtil
-	mkdir -p ${PATH_OUT}/game
+	@mkdir -p ${PATH_LIB_OUT}
+	@mkdir -p ${PATH_LIB_OUT}/libmessage
+	@mkdir -p ${PATH_LIB_OUT}/libprojectUtil
+	@mkdir -p ${PATH_OUT}/game
 
 # Server dependencies
 server : $(PATH_OUT)/server.o $(PATH_LIB_OUT)/libmessage.so $(PATH_LIB_OUT)/libprojectUtil.so
