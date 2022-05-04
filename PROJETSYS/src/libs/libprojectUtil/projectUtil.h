@@ -3,6 +3,7 @@
 #define SERVER_PID_FILE "/tmp/game_server.pid"
 #define PATH_FIFO "/tmp/game_server/"
 #define GAME_FIFO "/tmp/game_server.fifo"
+#define PATH_GAMES_OUT "./out/game/"
 #endif
 
 //convert an int to a string

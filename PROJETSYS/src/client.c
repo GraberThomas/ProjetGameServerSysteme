@@ -19,9 +19,9 @@ void verifyArgs(int argc, char **argv) {
         showUsage(argv);
         exit(1);
     }
-    size_t size_game_path = strlen("./out/game/")+ strlen(argv[1])+strlen("_cli");
+    size_t size_game_path = strlen(PATH_GAMES_OUT)+ strlen(argv[1])+strlen("_cli");
     char *game_path = malloc(sizeof(char) * (size_game_path + 1));
-    strcpy(game_path, "./out/game/");
+    strcpy(game_path, PATH_GAMES_OUT);
     strcat(game_path, argv[1]);
     strcat(game_path, "_cli");
     game_path[size_game_path] = '\0';
@@ -170,6 +170,8 @@ int main(int argc, char **argv){
     // close(fd_fifo);
     // close(fd_pid);
     fprintf(stdout,"Je recouvre\n");
+    char *path_game = calloc(sizeof(int), strlen(PATH_GAMES_OUT)+strlen(argv[1])+strlen("_cli")+1);
+    sprintf(path_game, "%s%s_cli", PATH_GAMES_OUT, argv[1]);
     execvp("./out/game/test_cli", argv+1);
     fprintf(stdout, "Error while executing the game\n");
 }

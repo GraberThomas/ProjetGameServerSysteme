@@ -59,6 +59,12 @@ void handSIGINT(int sig){
             perror("kill");
         }
     }
+    if(fork() == 0){
+        execl("/bin/bash", "/bin/bash", "-c", "rm /tmp/game_server/*.fifo", NULL);
+        //system("rm /tmp/game_server/*");
+        perror("rm");
+    }
+    wait(NULL);
     serv_exit(0, "\nServer interrupted by user\n");
 }
 
@@ -119,6 +125,8 @@ int main(int argc, char **argv){
     char *gameName;
     char *gamePath;
     char **argv_game;
+    char *pathPipe0;
+    char *pathPipe1;
     while(1){
         if(usr1_receive){
             printf("Debut\n");
@@ -140,9 +148,9 @@ int main(int argc, char **argv){
                 continue;
             }
 
-            size_path = strlen("./out/game/") + strlen(gameName) + strlen("_serv");
+            size_path = strlen(PATH_GAMES_OUT) + strlen(gameName) + strlen("_serv");
             gamePath = malloc(sizeof(char) * (size_path +1));
-            strcpy(gamePath, "./out/game/");
+            strcpy(gamePath, PATH_GAMES_OUT);
             strcat(gamePath, gameName);
             strcat(gamePath, "_serv");
             gamePath[size_path] = '\0';
@@ -184,8 +192,8 @@ int main(int argc, char **argv){
                         argv_game = NULL;
                     }
                     printf("game name : %s\n", gameName);
-                    char *pathPipe0 = getPathFIFO(pid_client, 0);
-                    char *pathPipe1 = getPathFIFO(pid_client, 1);
+                    pathPipe0 = getPathFIFO(pid_client, 0);
+                    pathPipe1 = getPathFIFO(pid_client, 1);
                     printf("pathPipe0 : %s\n", pathPipe0);
                     printf("pathPipe1 : %s\n", pathPipe1);
                     if(mkfifo(pathPipe0, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP | S_IROTH) != 0){
@@ -227,6 +235,8 @@ int main(int argc, char **argv){
                     usr1_receive = 0;
                     free(gameName);
                     free(gamePath);
+                    unlink(pathPipe0);
+                    unlink(pathPipe1);
                     continue;
                 }
             }
@@ -242,9 +252,7 @@ int main(int argc, char **argv){
             } else if (WIFCONTINUED(childResult)) {
                 printf("continued\n");
             }
-            usr1_receive = 0;
-            unlink(getPathFIFO(pid_client, 0));
-            unlink(getPathFIFO(pid_client, 1));
+            usr1_receive = 0;    
         }
     }
     return 0;

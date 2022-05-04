@@ -1,16 +1,16 @@
 PATH_OUT=./out
 PATH_LIBS=libs
-PATH_LIB_OUT=$(PWD)/${PATH_OUT}/${PATH_LIBS}
+PATH_LIB_OUT=${PATH_OUT}/${PATH_LIBS}
 PATH_SRC=./src
-PATH_GAME_OUT=$(PWD)/${PATH_OUT}/game
-PATH_GAME_SRC=$(PWD)/${PATH_SRC}/game
+PATH_GAME_OUT=${PATH_OUT}/game
+PATH_GAME_SRC=${PATH_SRC}/game
 CC=gcc
 CFLAGS=-Wall -std=c99 -g
 LDFLAGS=-g
 
 
 
-all : create_folders server client $(PATH_GAME_OUT)/test_serv $(PATH_GAME_OUT)/test_cli
+all : create_folders server client $(PATH_GAME_OUT)/test_serv $(PATH_GAME_OUT)/test_cli $(PATH_GAME_OUT)/hangman_serv $(PATH_GAME_OUT)/hangman_cli
 
 create_folders : 
 	@mkdir -p ${PATH_LIB_OUT}
@@ -30,6 +30,12 @@ $(PATH_GAME_OUT)/test_serv : $(PATH_GAME_OUT)/test_serv.o $(PATH_LIB_OUT)/libmes
 	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $< -lmessage
 
 $(PATH_GAME_OUT)/test_cli : $(PATH_GAME_OUT)/test_cli.o $(PATH_LIB_OUT)/libmessage.so
+	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $< -lmessage
+
+$(PATH_GAME_OUT)/hangman_serv : $(PATH_GAME_OUT)/hangman_serv.o $(PATH_LIB_OUT)/libmessage.so
+	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $< -lmessage
+
+$(PATH_GAME_OUT)/hangman_cli : $(PATH_GAME_OUT)/hangman_cli.o $(PATH_LIB_OUT)/libmessage.so
 	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $< -lmessage
 
 #build the shared libraries
@@ -63,6 +69,12 @@ $(PATH_GAME_OUT)/test_cli.o : $(PATH_GAME_SRC)/test_cli.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 $(PATH_GAME_OUT)/test_serv.o : $(PATH_GAME_SRC)/test_serv.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(PATH_GAME_OUT)/hangman_cli.o : $(PATH_GAME_SRC)/hangman_cli.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(PATH_GAME_OUT)/hangman_serv.o : $(PATH_GAME_SRC)/hangman_serv.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 clean : 
