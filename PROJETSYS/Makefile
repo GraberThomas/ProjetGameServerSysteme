@@ -2,13 +2,15 @@ PATH_OUT=./out
 PATH_LIBS=libs
 PATH_LIB_OUT=$(PWD)/${PATH_OUT}/${PATH_LIBS}
 PATH_SRC=./src
+PATH_GAME_OUT=$(PWD)/${PATH_OUT}/game
+PATH_GAME_SRC=$(PWD)/${PATH_SRC}/game
 CC=gcc
 CFLAGS=-Wall -std=c99 -g
 LDFLAGS=-g
 
 
 
-all : create_folders server client
+all : create_folders server client $(PATH_GAME_OUT)/test_serv $(PATH_GAME_OUT)/test_cli
 
 create_folders : 
 	mkdir -p ${PATH_LIB_OUT}
@@ -18,14 +20,17 @@ create_folders :
 
 # Server dependencies
 server : $(PATH_OUT)/server.o $(PATH_LIB_OUT)/libmessage.so $(PATH_LIB_OUT)/libprojectUtil.so
-	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $^ -lmessage -lprojectUtil
+	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $< -lmessage -lprojectUtil
 
 # Client dependencies
 client : $(PATH_OUT)/client.o $(PATH_LIB_OUT)/libmessage.so $(PATH_LIB_OUT)/libprojectUtil.so
-	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $^ -lmessage -lprojectUtil
+	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $< -lmessage -lprojectUtil
 
+$(PATH_GAME_OUT)/test_serv : $(PATH_GAME_OUT)/test_serv.o $(PATH_LIB_OUT)/libmessage.so
+	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $< -lmessage
 
-
+$(PATH_GAME_OUT)/test_cli : $(PATH_GAME_OUT)/test_cli.o $(PATH_LIB_OUT)/libmessage.so
+	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $< -lmessage
 
 #build the shared libraries
 $(PATH_LIB_OUT)/libmessage.so : $(PATH_LIB_OUT)/libmessage/libmessage.o
@@ -54,6 +59,11 @@ $(PATH_LIB_OUT)/libmessage/libmessage.o : $(PATH_SRC)/$(PATH_LIBS)/libmessage/me
 $(PATH_LIB_OUT)/libprojectUtil/projectUtil.o : $(PATH_SRC)/$(PATH_LIBS)/libprojectUtil/projectUtil.c $(PATH_SRC)/$(PATH_LIBS)/libprojectUtil/projectUtil.h
 	$(CC) $(CFLAGS) -fPIC -c -o $@ $<
 
+$(PATH_GAME_OUT)/test_cli.o : $(PATH_GAME_SRC)/test_cli.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(PATH_GAME_OUT)/test_serv.o : $(PATH_GAME_SRC)/test_serv.c
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 clean : 
 	rm -rf $(PATH_OUT)

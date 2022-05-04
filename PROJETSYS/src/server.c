@@ -102,10 +102,10 @@ int main(int argc, char **argv){
     while(1){
         if(usr1_receive){
             printf("Debut\n");
-            fd_fifo = open("/tmp/game_server.fifo", O_RDONLY);
+            fd_fifo = open(GAME_FIFO, O_RDONLY);
             if (fd_fifo == -1) {
                 perror("open");
-                serv_exit(8,  "Error while opening the pipe /tmp/game_server.fifo\n");
+                serv_exit(8,  "Error while opening the pipe for the communication between server and client !\n");
             }
             if(read(fd_fifo, &pid_client, sizeof(int)) == -1){
                 fprintf(stderr, "Error while reading the pid of the client\n");
@@ -120,14 +120,14 @@ int main(int argc, char **argv){
                 continue;
             }
 
-            size_path = strlen("./game/") + strlen(gameName) + strlen("_serv");
+            size_path = strlen("./out/game/") + strlen(gameName) + strlen("_serv");
             gamePath = malloc(sizeof(char) * (size_path +1));
-            strcpy(gamePath, "./game/");
+            strcpy(gamePath, "./out/game/");
             strcat(gamePath, gameName);
             strcat(gamePath, "_serv");
             gamePath[size_path] = '\0';
-
-            if ( !access(gamePath, F_OK) || !access(gamePath, X_OK)){
+            printf("Game path : %s\n", gamePath);
+            if ( access(gamePath, F_OK) != 0 || access(gamePath, X_OK) != 0){
                 fprintf(stderr, "The server can't find the game or it is not executable\n");
                 free(gameName);
                 free(gamePath);
@@ -144,14 +144,26 @@ int main(int argc, char **argv){
                     serv_exit(10, "Error while forking the game\n");
                 }
                 if (pid_game == 0) {
-                    argv_game = recv_argv(fd_fifo);
-                    if(argv_game == NULL){
-                        fprintf(stderr, "Error while receiving the arguments of the game\n");
+                    int nbArguments= 0;
+                    if(read(fd_fifo, &nbArguments, sizeof(int)) == -1){
+                        fprintf(stderr, "Error while reading the number of arguments\n");
+                        perror("read");
                         usr1_receive = 0;
-                        free(gameName);
-                        free(gamePath);
                         continue;
                     }
+                    if(nbArguments != 0){
+                        argv_game = recv_argv(fd_fifo);
+                        if(argv_game == NULL){
+                            fprintf(stderr, "Error while receiving the arguments of the game\n");
+                            usr1_receive = 0;
+                            free(gameName);
+                            free(gamePath);
+                            continue;
+                        }
+                    }else{
+                        argv_game = NULL;
+                    }
+                    printf("game name : %s\n", gameName);
                     size_t size_path_pipes = strlen(PATH_FIFO) + strlen(itoa(pid_client)) + strlen("_0");
                     char *pathPipe0 = malloc(sizeof(char) * (size_path_pipes + 1));
                     strcpy(pathPipe0, PATH_FIFO);
@@ -171,6 +183,11 @@ int main(int argc, char **argv){
                         perror("mkfifo");
                         serv_exit(11, "Error while creating the pipes\n");
                     }
+                    if(kill(pid_client, SIGUSR1) == -1){
+                        perror("kill");
+                        serv_exit(12, "Error while send signal to the client\n");
+                    }
+                    printf("j'ai envoye sigusr1\n");
                     int fd_0 = open(pathPipe0, O_RDONLY);
                     if (fd_0 == -1) {
                         perror("open");
