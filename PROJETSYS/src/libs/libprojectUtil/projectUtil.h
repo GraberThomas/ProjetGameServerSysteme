@@ -14,3 +14,9 @@ char *getPathFIFO(int pid, int id);
 
 //verify string is a positive integer
 int isInt(char *str);
+
+//count the number of lines in a file
+int countLines(char *path);
+
+//Return the word with the numLine in the file
+char *getWordByNumLine(char *path, int numLine);

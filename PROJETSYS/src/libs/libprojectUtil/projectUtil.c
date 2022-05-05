@@ -33,3 +33,45 @@ int isInt(char *str){
     }
     return 1;
 }
+
+//count the number of lines in a file
+int countLines(char *path){
+    int nbLines = 0;
+    FILE *file = fopen(path, "r");
+    if(file == NULL){
+        fprintf(stderr, "Error while opening the file : %s\n", path);
+        perror("fopen");
+        return -1;
+    }
+    char *line = malloc(sizeof(char) * 28);
+    while(!feof(file)){
+        fgets(line, 28, file);
+        nbLines++;
+    }
+    fclose(file);
+    free(line);
+    return nbLines;
+}
+
+//Return the word with the numLine in the file
+char *getWordByNumLine(char *path, int numLine){
+    FILE *file = fopen(path, "r");
+    if(file == NULL){
+        fprintf(stderr, "Error while opening the file : %s\n", path);
+        perror("fopen");
+        return NULL;
+    }
+    char *line = malloc(sizeof(char) * 28);
+    int i = 1;
+    while(!feof(file)){
+        fgets(line, 28, file);
+        if(i == numLine){
+            fclose(file);
+            return line;
+        }
+        i++;
+    }
+    fclose(file);
+    free(line);
+    return NULL;
+}

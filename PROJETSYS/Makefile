@@ -17,6 +17,7 @@ create_folders :
 	@mkdir -p ${PATH_LIB_OUT}/libmessage
 	@mkdir -p ${PATH_LIB_OUT}/libprojectUtil
 	@mkdir -p ${PATH_OUT}/game
+	@cp $(PATH_GAME_SRC)/dictionnaire.txt ${PATH_GAME_OUT}/dictionnaire.txt
 
 # Server dependencies
 server : $(PATH_OUT)/server.o $(PATH_LIB_OUT)/libmessage.so $(PATH_LIB_OUT)/libprojectUtil.so
