@@ -116,15 +116,14 @@ int main(int argc, char **argv){
         fprintf(stderr, "Error while sending the game name to the server\n");
         exit(13);
     }
-    int nb_args = argc - 2;
+    int nb_args = argc - 1;
     if(write(fd_fifo, &nb_args, sizeof(int)) == -1){
         fprintf(stderr, "Error while writing the number of arguments to the server\n");
         perror("write");
         exit(14);
     }
     if(nb_args != 0){
-        if(send_argv(fd_fifo, argv+2) != 0){
-            printf("%d\n", send_argv(fd_fifo, argv+2));
+        if(send_argv(fd_fifo, argv+1) != 0){
             fprintf(stderr, "Error while sending the arguments to the server\n");
             exit(15);
         }
@@ -172,6 +171,7 @@ int main(int argc, char **argv){
     fprintf(stdout,"Je recouvre\n");
     char *path_game = calloc(sizeof(int), strlen(PATH_GAMES_OUT)+strlen(argv[1])+strlen("_cli")+1);
     sprintf(path_game, "%s%s_cli", PATH_GAMES_OUT, argv[1]);
-    execvp("./out/game/test_cli", argv+1);
+    execvp(path_game, argv+1);
     fprintf(stdout, "Error while executing the game\n");
+    free(path_game);
 }

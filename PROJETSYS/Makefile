@@ -32,11 +32,11 @@ $(PATH_GAME_OUT)/test_serv : $(PATH_GAME_OUT)/test_serv.o $(PATH_LIB_OUT)/libmes
 $(PATH_GAME_OUT)/test_cli : $(PATH_GAME_OUT)/test_cli.o $(PATH_LIB_OUT)/libmessage.so
 	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $< -lmessage
 
-$(PATH_GAME_OUT)/hangman_serv : $(PATH_GAME_OUT)/hangman_serv.o $(PATH_LIB_OUT)/libmessage.so
-	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $< -lmessage
+$(PATH_GAME_OUT)/hangman_serv : $(PATH_GAME_OUT)/hangman_serv.o $(PATH_LIB_OUT)/libmessage.so $(PATH_LIB_OUT)/libprojectUtil.so
+	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $< -lmessage -lprojectUtil
 
-$(PATH_GAME_OUT)/hangman_cli : $(PATH_GAME_OUT)/hangman_cli.o $(PATH_LIB_OUT)/libmessage.so
-	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $< -lmessage
+$(PATH_GAME_OUT)/hangman_cli : $(PATH_GAME_OUT)/hangman_cli.o $(PATH_LIB_OUT)/libmessage.so $(PATH_LIB_OUT)/libprojectUtil.so
+	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $< -lmessage -lprojectUtil
 
 #build the shared libraries
 $(PATH_LIB_OUT)/libmessage.so : $(PATH_LIB_OUT)/libmessage/libmessage.o

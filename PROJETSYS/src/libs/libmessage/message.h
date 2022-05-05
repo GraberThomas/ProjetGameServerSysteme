@@ -22,6 +22,25 @@ int send_string(int fd, char *str);
 char *recv_string(int fd);
 
 /**
+ * @brief Send an integer via a file descriptor
+ * 
+ * @param fd The file descriptor to send the integer to
+ * @param num The integer to send
+ * @return int The return code : 
+ *                  1 if error while sending the integer
+ *                  0 if sucess
+ */
+int send_int(int fd, int num);
+
+/**
+ * @brief Receive an integer from a file descriptor
+ * 
+ * @param fd The file descriptor to get the integer from
+ * @return int The integer received, -1 if error
+ */
+int recv_int(int fd);
+
+/**
  * @brief Send an array of strings via a file descriptor
  * 
  * @param fd The file descriptor to get the string from

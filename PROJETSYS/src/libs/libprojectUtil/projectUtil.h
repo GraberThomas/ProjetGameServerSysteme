@@ -11,3 +11,6 @@ char *itoa(int i);
 
 //get the path of the fifo
 char *getPathFIFO(int pid, int id);
+
+//verify string is a positive integer
+int isInt(char *str);

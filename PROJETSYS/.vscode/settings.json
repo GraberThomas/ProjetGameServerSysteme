@@ -5,6 +5,7 @@
         "unistd.h": "c",
         "message.h": "c",
         "errno.h": "c",
-        "projectutil.h": "c"
+        "projectutil.h": "c",
+        "stdio.h": "c"
     }
 }

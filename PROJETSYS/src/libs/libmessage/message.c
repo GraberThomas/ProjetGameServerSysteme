@@ -41,6 +41,24 @@ char *recv_string(int fd) {
     return str;
 }
 
+int send_int(int fd, int num){
+    if(write(fd, &num, sizeof(int)) < 0){
+        perror("write int");
+        return 1;
+    }
+    return 0;
+}
+
+int recv_int(int fd) {
+    int num = 0;
+    int result = read(fd, &num, sizeof(int));
+    if(result < 0){
+        perror("read int");
+        return -1;
+    }
+    return num;
+}
+
 int send_argv(int fd, char *argv[]){
     int argc = 0;
     char **oldArgv = argv;
