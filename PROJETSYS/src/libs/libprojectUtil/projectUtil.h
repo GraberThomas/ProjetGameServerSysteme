@@ -20,3 +20,6 @@ int countLines(char *path);
 
 //Return the word with the numLine in the file
 char *getWordByNumLine(char *path, int numLine);
+
+//get a random number between 1 and max
+int getRandomNumber(int max);

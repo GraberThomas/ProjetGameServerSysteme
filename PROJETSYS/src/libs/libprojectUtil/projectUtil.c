@@ -43,9 +43,9 @@ int countLines(char *path){
         perror("fopen");
         return -1;
     }
-    char *line = malloc(sizeof(char) * 28);
+    char *line = malloc(sizeof(char) * 64);
     while(!feof(file)){
-        fgets(line, 28, file);
+        fgets(line, 64, file);
         nbLines++;
     }
     fclose(file);
@@ -61,12 +61,13 @@ char *getWordByNumLine(char *path, int numLine){
         perror("fopen");
         return NULL;
     }
-    char *line = malloc(sizeof(char) * 28);
+    char *line = calloc(sizeof(char), 64);
     int i = 1;
     while(!feof(file)){
-        fgets(line, 28, file);
+        fgets(line, 64, file);
         if(i == numLine){
             fclose(file);
+            line[strlen(line)-1] = '\0';
             return line;
         }
         i++;
@@ -74,4 +75,16 @@ char *getWordByNumLine(char *path, int numLine){
     fclose(file);
     free(line);
     return NULL;
+}
+
+int getRandomNumber(int max){
+    if(RAND_MAX > max){
+        return rand() % max + 1;
+    }else{
+        int nb = 0;
+        while(nb < max){
+            nb += rand() % RAND_MAX;
+        }
+        return nb % max + 1;
+    }
 }

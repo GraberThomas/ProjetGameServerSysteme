@@ -20,6 +20,23 @@ int send_string(int fd, char *str){
     return 0;
 }
 
+int send_char(int fd, char letter){
+    if(write(fd, &letter, sizeof(char)) < 0){
+        perror("write char");
+        return 1;
+    }
+    return 0;
+}
+
+char recv_char(int fd){
+    char letter;
+    if(read(fd, &letter, sizeof(char)) < 0){
+        perror("read char");
+        return -1;
+    }
+    return letter;
+}
+
 char *recv_string(int fd) {
     int len;
     char *str;

@@ -53,14 +53,14 @@ void handSIGUSR1(int sig) {
 
 //handler for sigint
 void handSIGINT(int sig){
-    printf("PID DU CLIENT: %d\n", pid_client);
+    //printf("PID DU CLIENT: %d\n", pid_client);
     if(pid_client != 0){
         if(kill(pid_client,SIGUSR2) == -1 && errno != ESRCH){
             perror("kill");
         }
     }
     if(fork() == 0){
-        execl("/bin/bash", "/bin/bash", "-c", "rm /tmp/game_server/*.fifo", NULL);
+        execl("/bin/bash", "/bin/bash", "-c", "rm -f /tmp/game_server/*.fifo", NULL);
         //system("rm /tmp/game_server/*");
         perror("rm");
     }

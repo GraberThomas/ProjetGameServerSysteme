@@ -41,6 +41,25 @@ int send_int(int fd, int num);
 int recv_int(int fd);
 
 /**
+ * @brief Send a char via a file descriptor
+ * 
+ * @param fd The file descriptor to send the char to
+ * @param character The char to send
+ * @return int The return code : 
+ *                  1 if error while sending the char
+ *                  0 if sucess
+ */
+int send_char(int fd, char character);
+
+/**
+ * @brief Receive a char from a file descriptor
+ * 
+ * @param fd The file descriptor to get the char from
+ * @return char The char received, -1 if error
+ */
+char recv_char(int fd);
+
+/**
  * @brief Send an array of strings via a file descriptor
  * 
  * @param fd The file descriptor to get the string from
