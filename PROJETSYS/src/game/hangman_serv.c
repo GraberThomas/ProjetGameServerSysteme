@@ -196,6 +196,7 @@ int main(int argc, char **argv){
             char_input = char_input - 'A' + 'a';
         }
         string = calloc(strlen("Good choice, ") + strlen("you are still entlited to ")+strlen(" errors") + strlen(argv[2]) + 1, sizeof(char));
+        
         if(verifyAnswer(game, char_input) == 1) {
             if(game->nb_error_max == NULL) {
                 strcpy(string, "Good choice !");
@@ -208,7 +209,7 @@ int main(int argc, char **argv){
             game->nb_current_error++;
             if(game->nb_error_max == NULL) {
                 strcpy(string, "Error !");
-            }else{
+            }else {
                 strcpy(string, "Error, you are still entlited to ");
                 strcat(string, itoa(*game->nb_error_max - game->nb_current_error));
                 strcat(string, " errors");
@@ -227,7 +228,7 @@ int main(int argc, char **argv){
                 exit(ERROR_CODE_COMM);
             }
             break;
-        }else if(game->nb_current_error >= (game->nb_error_max == NULL ? game->nb_current_error : *game->nb_error_max)){
+        }else if(game->nb_error_max != NULL && game->nb_current_error == *game->nb_error_max) {
             if(send_int(STD_OUT, 0) != 0) {
                 fprintf(stderr, MSG_ERROR_COMM);
                 exit(ERROR_CODE_COMM);
