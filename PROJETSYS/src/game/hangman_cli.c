@@ -32,8 +32,6 @@ int verifySizePseudo(char *pseudo){
 
 
 int main(int argc, char **argv){
-    fprintf(stderr, "\nLancement de hangman_cli\n");
-
     // server indicates if arguments are valid or not
     int valid_argv = recv_int(SERV_IN_FILENO);
     if (valid_argv == -1){
@@ -205,11 +203,9 @@ int main(int argc, char **argv){
                 fprintf(stderr, "%s\n",MSG_ERROR_COMM);
                 exit(ERROR_CODE_COMM);
             }
-            printf("je passe\n");
             free(string);
             if(bool_again){
                 string = recv_string(SERV_IN_FILENO);
-                printf("je passe2\n");
                 if(string == NULL){
                     fprintf(stderr, "%s\n",MSG_ERROR_COMM);
                     exit(ERROR_CODE_COMM);

@@ -42,7 +42,6 @@ void initGame(struct game *game, int argc, char *argv[], char *secretWord){
     game->nb_tries = 0;
     game->complete_word = secretWord;
     game->current_word_display = malloc(sizeof(char) * (strlen(secretWord) + 1));
-    fprintf(stderr, "Size of word : %ld\n", strlen(secretWord));
     for(int i = 0 ; i < strlen(secretWord) ; i++) {
         game->current_word_display[i] = '-';
     }
@@ -161,11 +160,9 @@ int saveGameResult(struct game *game, char *pseudo){
 
 int main(int argc, char **argv){
     srand(getpid());
-    fprintf(stderr, "\nLancement de hangman_serv\n");
     // Verify args sent by client
     verifyArgs(argc, argv);
     int nb_words = countLines("./out/game/dictionnaire.txt");
-    fprintf(stderr, "Nombre de mots dans le dictionnaire : %d\n", nb_words);
     if(nb_words == 0) {
         fprintf(stderr, "Error : no words in the dictionary\n");
         exit(10);
@@ -174,14 +171,11 @@ int main(int argc, char **argv){
         exit(11);
     }
     int number_of_the_word = getRandomNumber(nb_words);
-    fprintf(stderr, "The number of the word is : %d\n", number_of_the_word);
     // char *secretWord = getWordByNumLine("./out/game/dictionnaire.txt", 135186);
     char *secretWord = getWordByNumLine("./out/game/dictionnaire.txt", number_of_the_word);
-    fprintf(stderr, "The secret word is : %s\n", secretWord);
+    fprintf(stderr, "Secret word : %s\n", secretWord);
     struct game *game = malloc(sizeof(struct game));
     initGame(game, argc, argv, secretWord);
-    fprintf(stderr, "The current word is : %s\n", game->complete_word);
-    fprintf(stderr, "The current display is : %s\n", game->current_word_display);
     char *string;
     // Send the welcome message
     if(send_string(STD_OUT, MSG_WELCOME) != 0) {
@@ -283,7 +277,6 @@ int main(int argc, char **argv){
     }
     if(bool_win == 1) {
         size_t size = strlen("You won, you found the word \"") + strlen(game->complete_word) +strlen("\", you have ") +strlen(itoa(game->nb_current_error) + strlen(" errors"));
-        fprintf(stderr, "The size of the string is : %ld\n", size);
         string = calloc(size +1, sizeof(char));
         strcpy(string, "You won, you found the word \"");
         strcat(string, game->complete_word);
@@ -327,7 +320,6 @@ int main(int argc, char **argv){
                 fprintf(stderr, MSG_ERROR_COMM);
                 exit(ERROR_CODE_COMM);
             }
-            fprintf(stderr, "The pseudo is : %s\n", pseudo);
             if (strlen(pseudo) >= 4 && !containsSpaces(pseudo)) {
                 if (send_int(STD_OUT, 0) != 0) {
                     fprintf(stderr, MSG_ERROR_COMM);

@@ -25,7 +25,6 @@ void verifyArgs(int argc, char **argv) {
     strcat(game_path, argv[1]);
     strcat(game_path, "_cli");
     game_path[size_game_path] = '\0';
-    printf("%s\n", game_path);
     if (access(game_path, F_OK) == -1) {
         fprintf(stderr, "Game %s not found\n", argv[1]);
         showUsage(argv);
@@ -39,7 +38,7 @@ void verifyArgs(int argc, char **argv) {
 
 //handler for SIGUSR1
 void handler_usr1(int sig){
-    printf("SIGUSR1 received\n");
+    
 }
 
 //handler for SIGUSR2
@@ -138,9 +137,6 @@ int main(int argc, char **argv){
     //     exit(11);
     // }
     pause();
-
-    printf("Je continue\n");
-    fprintf(stdout,"%s\n%s\n", getPathFIFO(pid_client, 0), getPathFIFO(pid_client, 1));
     int fd0 = open(getPathFIFO(pid_client, 0), O_WRONLY);
     if(fd0 == -1){
         fprintf(stderr, "Error while opening the fifo\n");
@@ -165,10 +161,6 @@ int main(int argc, char **argv){
         exit(19);
     }
     close(fd1);
-    printf("fd0 : %d , fd1 : %d", fd0, fd1);
-    // close(fd_fifo);
-    // close(fd_pid);
-    fprintf(stdout,"Je recouvre\n");
     char *path_game = calloc(sizeof(int), strlen(PATH_GAMES_OUT)+strlen(argv[1])+strlen("_cli")+1);
     sprintf(path_game, "%s%s_cli", PATH_GAMES_OUT, argv[1]);
     execvp(path_game, argv+1);

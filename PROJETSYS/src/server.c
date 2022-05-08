@@ -47,7 +47,6 @@ int serv_exit(int error, char *msg) {
 }
 
 void handSIGUSR1(int sig) {
-    write(1, "SIGUSR1 received\n", 18);
     usr1_receive = 1;
 }
 
@@ -129,7 +128,6 @@ int main(int argc, char **argv){
     char *pathPipe1;
     while(1){
         if(usr1_receive){
-            printf("Debut\n");
             fd_fifo = open(GAME_FIFO, O_RDONLY);
             if (fd_fifo == -1) {
                 perror("open");
@@ -154,7 +152,6 @@ int main(int argc, char **argv){
             strcat(gamePath, gameName);
             strcat(gamePath, "_serv");
             gamePath[size_path] = '\0';
-            printf("Game path : %s\n", gamePath);
             if ( access(gamePath, F_OK) != 0 || access(gamePath, X_OK) != 0){
                 fprintf(stderr, "The server can't find the game or it is not executable\n");
                 free(gameName);
@@ -191,11 +188,8 @@ int main(int argc, char **argv){
                     }else{
                         argv_game = NULL;
                     }
-                    printf("game name : %s\n", gameName);
                     pathPipe0 = getPathFIFO(pid_client, 0);
                     pathPipe1 = getPathFIFO(pid_client, 1);
-                    printf("pathPipe0 : %s\n", pathPipe0);
-                    printf("pathPipe1 : %s\n", pathPipe1);
                     if(mkfifo(pathPipe0, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP | S_IROTH) != 0){
                         perror("mkfifo");
                         serv_exit(11, "Error while creating the pipes\n");
@@ -208,7 +202,6 @@ int main(int argc, char **argv){
                         perror("kill");
                         serv_exit(12, "Error while send signal to the client\n");
                     }
-                    printf("j'ai envoye sigusr1\n");
                     int fd_0 = open(pathPipe0, O_RDONLY);
                     if (fd_0 == -1) {
                         perror("open");
@@ -219,7 +212,6 @@ int main(int argc, char **argv){
                         perror("open");
                         serv_exit(12, "Error while opening the pipe\n");
                     }
-                    printf(" fd_0 : %d, fd_1 : %d\n", fd_0, fd_1);
                     if(dup2(fd_0, 0) != 0){
                         perror("dup2");
                         serv_exit(13, "Error while duplicating the pipe 0 to stdout\n");
