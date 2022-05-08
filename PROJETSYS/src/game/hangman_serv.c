@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>
 
 #include "../libs/libmessage/message.h"
 #include "../libs/libprojectUtil/projectUtil.h"
@@ -12,6 +13,12 @@
 #define MSG_BEGIN_GAME "Begin of the game. Good luck !"
 #define MSG_WORD_TO_FIND "Word to find : "
 #define MSG_UNLIMTED_TRIES "There is no limit number of errors"
+#define MSG_CHOICE_SAVE "Do you want save your result ? [Y/n]"
+#define MSG_SAVE "You have chosen to save your result,\nyou must choose a pseudo with no space and minimum length 4\n\n"
+#define MSG_SAVE_SUCCESS "Bye, save the result was successful"
+#define MSG_SAVE_FAILED "Bye, save the result failed"
+#define MSG_ENTER_PSEUDO "Enter your pseudo : "
+#define MSG_ENTER_PSEUDO_ERROR "Error : the pseudo is to short, or it contains space(s)"
 #define ERROR_CODE_COMM  63
 #define STD_IN 0
 #define STD_OUT 1 
@@ -19,6 +26,7 @@
 struct game{
     int *nb_error_max;
     int nb_current_error;
+    int nb_tries;
     char *complete_word;
     char *current_word_display;
 };
@@ -31,6 +39,7 @@ void initGame(struct game *game, int argc, char *argv[], char *secretWord){
         game->nb_error_max = NULL;
     }
     game->nb_current_error = 0;
+    game->nb_tries = 0;
     game->complete_word = secretWord;
     game->current_word_display = malloc(sizeof(char) * (strlen(secretWord) + 1));
     fprintf(stderr, "Size of word : %ld\n", strlen(secretWord));
@@ -126,6 +135,30 @@ void verifyArgs(int argc, char *argv[]) {
     }
 }
 
+int saveGameResult(struct game *game, char *pseudo){
+    char *pathResults = malloc(sizeof(char) * (strlen(PATH_GAME_SERVER) + strlen("hangman_results") + 1));
+    strcpy(pathResults, PATH_GAME_SERVER);
+    strcat(pathResults, "hangman_results");
+    FILE *file = fopen(pathResults, "a");
+    if(file == NULL) {
+        free(pathResults);
+        return 1;
+    }
+    //get current date time
+    time_t timestamp = time( NULL );
+    struct tm * pTime = localtime( & timestamp );
+    char *time = malloc(sizeof(char) * 23);
+    strftime(time, 23, "%F at %H:%M:%S", pTime);
+    time[22] = '\0';
+    fprintf(file, "%d;%d;%s;%s;%s\n", game->nb_tries, game->nb_current_error, game->complete_word, pseudo, time);
+    free(time);
+    free(pathResults);
+    if (fclose(file) != 0) {
+        return 1;
+    }
+    return 0;
+}
+
 int main(int argc, char **argv){
     srand(getpid());
     fprintf(stderr, "\nLancement de hangman_serv\n");
@@ -187,14 +220,17 @@ int main(int argc, char **argv){
             fprintf(stderr, MSG_ERROR_COMM);
             exit(ERROR_CODE_COMM);
         }
-        char_input = recv_char(STD_IN);
-        if (char_input == -1) {
-            fprintf(stderr, MSG_ERROR_COMM);
-            exit(ERROR_CODE_COMM);
-        }
-        if(char_input >= 'A' && char_input <= 'Z') {
-            char_input = char_input - 'A' + 'a';
-        }
+        do {
+            char_input = recv_char(STD_IN);
+            if (char_input == -1) {
+                fprintf(stderr, MSG_ERROR_COMM);
+                exit(ERROR_CODE_COMM);
+            }
+            if(char_input >= 'A' && char_input <= 'Z') {
+                char_input = char_input - 'A' + 'a';
+            }
+        } while (!_isAlpha(char_input));
+        game->nb_tries++;
         string = calloc(strlen("Good choice, ") + strlen("you are still entlited to ")+strlen(" errors") + strlen(argv[2]) + 1, sizeof(char));
         
         if(verifyAnswer(game, char_input) == 1) {
@@ -241,6 +277,10 @@ int main(int argc, char **argv){
             }
         }
     }
+    if (send_int(STD_OUT, bool_win) != 0) {
+        fprintf(stderr, MSG_ERROR_COMM);
+        exit(ERROR_CODE_COMM);
+    }
     if(bool_win == 1) {
         size_t size = strlen("You won, you found the word \"") + strlen(game->complete_word) +strlen("\", you have ") +strlen(itoa(game->nb_current_error) + strlen(" errors"));
         fprintf(stderr, "The size of the string is : %ld\n", size);
@@ -251,6 +291,72 @@ int main(int argc, char **argv){
         strcat(string, itoa(game->nb_current_error));
         strcat(string, " errors");
         fprintf(stderr, "Win !");
+
+        if(send_string(STD_OUT, string) != 0) {
+            fprintf(stderr, MSG_ERROR_COMM);
+            exit(ERROR_CODE_COMM);
+        }
+
+        if(send_string(STD_OUT, MSG_CHOICE_SAVE) != 0) {
+            fprintf(stderr, MSG_ERROR_COMM);
+            exit(ERROR_CODE_COMM);
+        }
+        char choice = recv_char(STD_IN);
+        if (choice == -1) {
+            fprintf(stderr, MSG_ERROR_COMM);
+            exit(ERROR_CODE_COMM);
+        }
+        if(choice == 'n' || choice == 'N') {
+            return 0;
+        }
+
+        // Save the game
+        if(send_string(STD_OUT, MSG_SAVE) != 0) {
+            fprintf(stderr, MSG_ERROR_COMM);
+            exit(ERROR_CODE_COMM);
+        }
+
+        char *pseudo;
+        while (1) {
+            if(send_string(STD_OUT, MSG_ENTER_PSEUDO) != 0) {
+                fprintf(stderr, MSG_ERROR_COMM);
+                exit(ERROR_CODE_COMM);
+            }
+            pseudo = recv_string(STD_IN);
+            if (pseudo == NULL) {
+                fprintf(stderr, MSG_ERROR_COMM);
+                exit(ERROR_CODE_COMM);
+            }
+            fprintf(stderr, "The pseudo is : %s\n", pseudo);
+            if (strlen(pseudo) >= 4 && !containsSpaces(pseudo)) {
+                if (send_int(STD_OUT, 0) != 0) {
+                    fprintf(stderr, MSG_ERROR_COMM);
+                    exit(ERROR_CODE_COMM);
+                }
+                break;
+            }
+            if (send_int(STD_OUT, 1) != 0) {
+                fprintf(stderr, MSG_ERROR_COMM);
+                exit(ERROR_CODE_COMM);
+            }
+            if(send_string(STD_OUT, MSG_ENTER_PSEUDO_ERROR) != 0) {
+                fprintf(stderr, MSG_ERROR_COMM);
+                exit(ERROR_CODE_COMM);
+            }
+        }
+        if(saveGameResult(game, pseudo) == 0){
+            if(send_string(STD_OUT, MSG_SAVE_SUCCESS) != 0) {
+                fprintf(stderr, MSG_ERROR_COMM);
+                exit(ERROR_CODE_COMM);
+            }
+        }else{
+            if(send_string(STD_OUT, MSG_SAVE_FAILED) != 0) {
+                fprintf(stderr, MSG_ERROR_COMM);
+                exit(ERROR_CODE_COMM);
+            }
+        }
+        free(pseudo);
+
     }else{
         size_t size = strlen("You loose, the secret word was \"") + strlen(game->complete_word) + strlen("\".");
         string = calloc(size +1, sizeof(char));
@@ -262,5 +368,7 @@ int main(int argc, char **argv){
         fprintf(stderr, MSG_ERROR_COMM);
         exit(ERROR_CODE_COMM);
     }
+
+    
     return 0;
 } 

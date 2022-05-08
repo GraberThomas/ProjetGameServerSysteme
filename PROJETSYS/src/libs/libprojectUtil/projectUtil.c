@@ -11,9 +11,9 @@ char *itoa(int i){
 }
 
 char *getPathFIFO(int pid, int id){
-    size_t size = strlen(PATH_FIFO)+strlen("cli")+ strlen(itoa(pid))+strlen("_0")+ strlen(".fifo");
+    size_t size = strlen(PATH_GAME_SERVER)+strlen("cli")+ strlen(itoa(pid))+strlen("_0")+ strlen(".fifo");
     char *path = malloc(sizeof(char) * (size+1));
-    strcpy(path, PATH_FIFO);
+    strcpy(path, PATH_GAME_SERVER);
     strcat(path, "cli");
     strcat(path, itoa(pid));
     strcat(path, "_");
@@ -77,6 +77,7 @@ char *getWordByNumLine(char *path, int numLine){
     return NULL;
 }
 
+//Get a random number between 1 and max, because sometimes RAND_MAX is not enough
 int getRandomNumber(int max){
     if(RAND_MAX > max){
         return rand() % max + 1;
@@ -87,4 +88,20 @@ int getRandomNumber(int max){
         }
         return nb % max + 1;
     }
+}
+
+// verify if a string contains spaces
+int containsSpaces(char *str){
+    int i = 0;
+    while(str[i] != '\0'){
+        if(str[i] == ' '){
+            return 1;
+        }
+        i++;
+    }
+    return 0;
+}
+
+int _isAlpha(char input){
+    return ((input >= 'a' && input <= 'z') || (input >= 'A' && input <= 'Z'));
 }
