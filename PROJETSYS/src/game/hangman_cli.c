@@ -86,6 +86,7 @@ int main(int argc, char **argv){
             exit(ERROR_CODE_COMM);
         }
         fprintf(stdout, "%s\n", string);
+        free(string);
         input_ok = 0;
         while(input_ok == 0){
             fprintf(stdout, "Choice %d, enter a letter :", nb_choice);
@@ -115,14 +116,13 @@ int main(int argc, char **argv){
             exit(ERROR_CODE_COMM);
         }
         fprintf(stdout, "%s\n", string);
-        
+        free(string);
         bool_again = recv_int(SERV_IN_FILENO);
         if(bool_again == -1){
             fprintf(stderr, "%s\n",MSG_ERROR_COMM);
             exit(ERROR_CODE_COMM);
         }
     }
-    free(string);
     //receive the information of the result
     int bool_result = recv_int(SERV_IN_FILENO);
     if(bool_result == -1){
@@ -175,7 +175,7 @@ int main(int argc, char **argv){
             }
             fprintf(stdout, "%s", string);
             free(string);
-            string = malloc(sizeof(char)*PSEUDO_MAX_SIZE+1);
+            string = calloc(sizeof(char), PSEUDO_MAX_SIZE+1);
             if(fgets(string, PSEUDO_MAX_SIZE, stdin) == NULL){
                 free(string);
                 fprintf(stderr, "Error with the input.\n");
@@ -221,6 +221,7 @@ int main(int argc, char **argv){
             exit(ERROR_CODE_COMM);
         }
         fprintf(stdout, "%s\n", string);
+        free(string);
     }
     return 0;
 }   

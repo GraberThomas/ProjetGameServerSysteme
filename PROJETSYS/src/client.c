@@ -38,7 +38,7 @@ void verifyArgs(int argc, char **argv) {
 
 //handler for SIGUSR1
 void handler_usr1(int sig){
-    
+    fprintf(stderr,"je recois usr1\n");
 }
 
 //handler for SIGUSR2
@@ -48,6 +48,12 @@ void handler_usr2(int sig){
 }
 
 int main(int argc, char **argv){
+    sigset_t set;
+    sigset_t oldset;
+    sigemptyset(&set);
+    sigaddset(&set, SIGUSR1);
+    sigprocmask(SIG_BLOCK, &set, &oldset);
+    fprintf(stderr, "je passe ici\n");
     pid_t pid_client = getpid();
     pid_t pid_server;
     verifyArgs(argc, argv);
@@ -88,17 +94,6 @@ int main(int argc, char **argv){
         perror("sigaction");
         exit(9);
     }
-    // TODO: sigprocmask to block SIGUSR1 and SIGUSR2
-    //block sigUSR1
-    // sigset_t set;
-    // sigset_t oldset;
-    // sigemptyset(&set);
-    // sigaddset(&set, SIGUSR1);
-    // if(sigprocmask(SIG_BLOCK, &set, &oldset) == -1){
-    //     fprintf(stderr, "Error while blocking SIGUSR1\n");
-    //     perror("sigprocmask");
-    //     exit(10);
-    // }
     kill(pid_server, SIGUSR1);
     int fd_fifo = open(GAME_FIFO, O_WRONLY);
     if(fd_fifo == -1){
@@ -106,6 +101,7 @@ int main(int argc, char **argv){
         perror("open");
         exit(11);
     }
+
     if(write(fd_fifo, &pid_client, sizeof(pid_t)) == -1){
         fprintf(stderr, "Error while writing the pid of the client to the server\n");
         perror("write");
@@ -127,16 +123,13 @@ int main(int argc, char **argv){
             exit(15);
         }
     }
-    
-    // //wait with sugspend for SIGUSR1
-    // sigsuspend(&set);
-    // //restore sigUSR1
-    // if(sigprocmask(SIG_SETMASK, &oldset, NULL) == -1){
-    //     fprintf(stderr, "Error while restoring SIGUSR1\n");
-    //     perror("sigprocmask");
-    //     exit(11);
-    // }
-    pause();
+
+    fprintf(stderr, "je me met en pause\n");
+    sigset_t new = oldset;
+    sigdelset(&new, SIGUSR1);
+    sigsuspend(&new);
+    sigprocmask(SIG_SETMASK, &oldset, NULL);
+    fprintf(stderr, "je me resume\n");
     int fd0 = open(getPathFIFO(pid_client, 0), O_WRONLY);
     if(fd0 == -1){
         fprintf(stderr, "Error while opening the fifo\n");
@@ -163,7 +156,9 @@ int main(int argc, char **argv){
     close(fd1);
     char *path_game = calloc(sizeof(int), strlen(PATH_GAMES_OUT)+strlen(argv[1])+strlen("_cli")+1);
     sprintf(path_game, "%s%s_cli", PATH_GAMES_OUT, argv[1]);
+    fprintf(stderr,"je vais executer\n");
     execvp(path_game, argv+1);
+    //execlp("valgrind", "valgrind", "-s","--leak-check=full", "--show-leak-kinds=all",path_game,"-n","3",NULL);
     fprintf(stdout, "Error while executing the game\n");
     free(path_game);
 }

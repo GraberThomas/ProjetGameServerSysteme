@@ -360,7 +360,5 @@ int main(int argc, char **argv){
         fprintf(stderr, MSG_ERROR_COMM);
         exit(ERROR_CODE_COMM);
     }
-
-    
     return 0;
 } 

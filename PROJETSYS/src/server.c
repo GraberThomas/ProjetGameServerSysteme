@@ -212,13 +212,13 @@ int main(int argc, char **argv){
                         perror("open");
                         serv_exit(12, "Error while opening the pipe\n");
                     }
-                    if(dup2(fd_0, 0) != 0){
+                    if(dup2(fd_0, 0) == -1){
                         perror("dup2");
                         serv_exit(13, "Error while duplicating the pipe 0 to stdout\n");
                     }
                     if(dup2(fd_1, 1) == -1){
-                        fprintf(stderr, "Error while duplicate the pipe 1 to stdout\n");
                         perror("dup2");
+                        serv_exit(13, "Error while duplicating the pipe 0 to stdout\n");
                     }
                     close(fd_0);
                     close(fd_1);
