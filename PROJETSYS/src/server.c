@@ -91,6 +91,7 @@ int main(int argc, char **argv){
         perror("write");
         serv_exit(3, "Error while writing the pid in the file !\n");
     }
+    close(fd_fifo_game_server_pid);
     if( ! checkIfFileExists("/tmp/game_server.fifo")){
         if(mkfifo("/tmp/game_server.fifo",  S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP) != 0){
             perror("mkfifo");
@@ -223,6 +224,7 @@ int main(int argc, char **argv){
                     close(fd_0);
                     close(fd_1);
                     execv(gamePath, argv_game);
+                    //execlp("valgrind", "valgrind", "-s","--leak-check=full", "--show-leak-kinds=all",gamePath,"-n","3",NULL);
                     perror("execv");
                     usr1_receive = 0;
                     free(gameName);

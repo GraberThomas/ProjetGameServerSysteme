@@ -1,6 +1,7 @@
 #ifndef MACRO_UTIL_H
 #define MACRO_UTIL_H
 #define SERVER_PID_FILE "/tmp/game_server.pid"
+#define CLIENT_PID_FILE "/tmp/game_client.pid"
 #define PATH_GAME_SERVER "/tmp/game_server/"
 #define GAME_FIFO "/tmp/game_server.fifo"
 #define PATH_GAMES_OUT "./out/game/"

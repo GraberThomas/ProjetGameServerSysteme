@@ -1,7 +1,10 @@
+#define _DEFAULT_SOURCE
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <signal.h>
 
 #include "../libs/libmessage/message.h"
 #include "../libs/libprojectUtil/projectUtil.h"
@@ -11,6 +14,14 @@
 #define MSG_ERROR_COMM "Error in communication with the server."
 #define ERROR_CODE_COMM  63
 #define PSEUDO_MAX_SIZE 10
+
+char *string = NULL;
+
+void all_destroy(void) {
+    if(string != NULL) {
+        free(string);
+    }
+}
 
 void emptyBuffer(){
     int c = 0;
@@ -30,12 +41,19 @@ int verifySizePseudo(char *pseudo){
     return 0;
 }
 
+//handler for SIGALRM
+void handler_alrm(int sig){
+    fprintf(stdout, "\nYou are out of time\n");
+    all_destroy();
+    exit(0);
+}
 
 int main(int argc, char **argv){
     // server indicates if arguments are valid or not
     int valid_argv = recv_int(SERV_IN_FILENO);
     if (valid_argv == -1){
         fprintf(stderr, "%s\n",MSG_ERROR_COMM);
+        all_destroy();
         exit(ERROR_CODE_COMM);
     }
     if (!valid_argv) {
@@ -43,20 +61,22 @@ int main(int argc, char **argv){
         char *error_msg = recv_string(SERV_IN_FILENO);
         if(error_msg == NULL){
             fprintf(stderr, "%s\n",MSG_ERROR_COMM);
+            all_destroy();
             exit(ERROR_CODE_COMM); 
         }
         fprintf(stderr, "%s\n", error_msg);
+        all_destroy();
         exit(2);
     }
     //receive welcome message
-    char *string = recv_string(SERV_IN_FILENO);
+    string = recv_string(SERV_IN_FILENO);
     if(string == NULL){
         fprintf(stderr, "%s\n",MSG_ERROR_COMM);
         exit(ERROR_CODE_COMM);
     }
     fprintf(stdout, "%s\n", string);
     free(string);
-
+    string=NULL;
     // Receive number of tries message
     string = recv_string(SERV_IN_FILENO);
     if(string == NULL){
@@ -65,28 +85,53 @@ int main(int argc, char **argv){
     }
     fprintf(stdout, "%s\n", string);
     free(string);
-
-    //receive the message of begin of the game
+    string = NULL;
+    //receive the timer msg
     string = recv_string(SERV_IN_FILENO);
     if(string == NULL){
         fprintf(stderr, "%s\n",MSG_ERROR_COMM);
+        all_destroy();
         exit(ERROR_CODE_COMM);
     }
     fprintf(stdout, "%s\n", string);
     free(string);
+    string = NULL;
+    //receive the message of begin of the game
+    string = recv_string(SERV_IN_FILENO);
+    if(string == NULL){
+        fprintf(stderr, "%s\n",MSG_ERROR_COMM);
+        all_destroy();
+        exit(ERROR_CODE_COMM);
+    }
+    fprintf(stdout, "%s\n", string);
+    free(string);
+    string=NULL;
     char char_input;
     int input_ok;
     int bool_again = 1;
     int nb_choice = 1;
+
+    struct sigaction act;
+    act.sa_handler = handler_alrm;
+    act.sa_flags = 0;
+    sigemptyset(&act.sa_mask);
+    if (sigaction(SIGALRM, &act, NULL) == -1) {
+       perror("sigaction");
+        all_destroy();
+        exit(1);
+    }
+
     while(bool_again){
         //receive the current display of the word
         string = recv_string(SERV_IN_FILENO);
         if(string == NULL){
             fprintf(stderr, "%s\n",MSG_ERROR_COMM);
+            all_destroy();
             exit(ERROR_CODE_COMM);
         }
         fprintf(stdout, "%s\n", string);
         free(string);
+        string=NULL;
         input_ok = 0;
         while(input_ok == 0){
             fprintf(stdout, "Choice %d, enter a letter :", nb_choice);
@@ -104,6 +149,7 @@ int main(int argc, char **argv){
         //send the letter to the server
         if(send_char(SERV_OUT_FILENO, char_input) != 0){
             fprintf(stderr, "%s\n",MSG_ERROR_COMM);
+            all_destroy();
             exit(ERROR_CODE_COMM);
         }
         input_ok = 0;
@@ -113,13 +159,16 @@ int main(int argc, char **argv){
         string = recv_string(SERV_IN_FILENO);
         if(string == NULL){
             fprintf(stderr, "%s\n",MSG_ERROR_COMM);
+            all_destroy();
             exit(ERROR_CODE_COMM);
         }
         fprintf(stdout, "%s\n", string);
         free(string);
+        string=NULL;
         bool_again = recv_int(SERV_IN_FILENO);
         if(bool_again == -1){
             fprintf(stderr, "%s\n",MSG_ERROR_COMM);
+            all_destroy();
             exit(ERROR_CODE_COMM);
         }
     }
@@ -127,6 +176,7 @@ int main(int argc, char **argv){
     int bool_result = recv_int(SERV_IN_FILENO);
     if(bool_result == -1){
         fprintf(stderr, "%s\n",MSG_ERROR_COMM);
+        all_destroy();
         exit(ERROR_CODE_COMM);
     }
     //receive the message of end of the game
@@ -137,6 +187,7 @@ int main(int argc, char **argv){
     }
     fprintf(stdout, "%s\n", string);
     free(string);
+    string = NULL;
     if(bool_result){
         string = recv_string(SERV_IN_FILENO);
         if(string == NULL){
@@ -145,6 +196,7 @@ int main(int argc, char **argv){
         }
         fprintf(stdout, "%s\n", string);
         free(string);
+        string = NULL;
         char_input = getchar();
         emptyBuffer();
         while(char_input != 'y' && char_input != 'n' && char_input != 'Y' && char_input != 'N'){
@@ -154,6 +206,7 @@ int main(int argc, char **argv){
         }
         if(send_char(SERV_OUT_FILENO, char_input) != 0){
             fprintf(stderr, "%s\n",MSG_ERROR_COMM);
+            all_destroy();
             exit(ERROR_CODE_COMM);
         }
         if(char_input == 'n' || char_input == 'N'){
@@ -166,6 +219,7 @@ int main(int argc, char **argv){
         }
         fprintf(stdout, "%s\n", string);
         free(string);
+        string = NULL;
         bool_again = 1;
         while(bool_again){
             string = recv_string(SERV_IN_FILENO);
@@ -175,11 +229,12 @@ int main(int argc, char **argv){
             }
             fprintf(stdout, "%s", string);
             free(string);
+            string=NULL;
             string = calloc(sizeof(char), PSEUDO_MAX_SIZE+1);
-            if(fgets(string, PSEUDO_MAX_SIZE, stdin) == NULL){
-                free(string);
+            if(fgets(string, PSEUDO_MAX_SIZE, stdin) == NULL){;
                 fprintf(stderr, "Error with the input.\n");
                 perror("fgets");
+                all_destroy();
                 exit(15);
             }
             while(verifySizePseudo(string) == 0){
@@ -187,15 +242,15 @@ int main(int argc, char **argv){
                 fprintf(stdout, "Error in the input. Must be between 4 and %d characters.\n", PSEUDO_MAX_SIZE);
                 fprintf(stdout, "Please retry : ");
                 if(fgets(string, PSEUDO_MAX_SIZE, stdin) == NULL){
-                    free(string);
                     fprintf(stderr, "Error with the input.\n");
                     perror("fgets");
+                    all_destroy();
                     exit(15);
                 }
             }
             if(send_string(SERV_OUT_FILENO, string) != 0){
-                free(string);
                 fprintf(stderr, "%s\n",MSG_ERROR_COMM);
+                all_destroy();
                 exit(ERROR_CODE_COMM);
             }
             bool_again = recv_int(SERV_IN_FILENO);
@@ -204,24 +259,29 @@ int main(int argc, char **argv){
                 exit(ERROR_CODE_COMM);
             }
             free(string);
+            string=NULL;
             if(bool_again){
                 string = recv_string(SERV_IN_FILENO);
                 if(string == NULL){
                     fprintf(stderr, "%s\n",MSG_ERROR_COMM);
+                    all_destroy();
                     exit(ERROR_CODE_COMM);
                 }
                 fprintf(stdout, "%s\n", string);
                 free(string);
+                string=NULL;
             }
 
         }
         string = recv_string(SERV_IN_FILENO);
         if(string == NULL){
             fprintf(stderr, "%s\n",MSG_ERROR_COMM);
+            all_destroy();
             exit(ERROR_CODE_COMM);
         }
         fprintf(stdout, "%s\n", string);
         free(string);
+        string=NULL;
     }
     return 0;
 }   

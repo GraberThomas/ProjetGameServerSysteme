@@ -11,15 +11,19 @@ char *itoa(int i){
 }
 
 char *getPathFIFO(int pid, int id){
-    size_t size = strlen(PATH_GAME_SERVER)+strlen("cli")+ strlen(itoa(pid))+strlen("_0")+ strlen(".fifo");
+    char *string = itoa(pid);
+    char *string2 = itoa(id);
+    size_t size = strlen(PATH_GAME_SERVER)+strlen("cli")+ strlen(string)+strlen("_0")+ strlen(".fifo");
     char *path = malloc(sizeof(char) * (size+1));
     strcpy(path, PATH_GAME_SERVER);
     strcat(path, "cli");
-    strcat(path, itoa(pid));
+    strcat(path, string);
     strcat(path, "_");
-    strcat(path, itoa(id));
+    strcat(path, string2);
     strcat(path, ".fifo");
     path[size] = '\0';
+    free(string);
+    free(string2);
     return path;
 }
 
@@ -61,10 +65,10 @@ char *getWordByNumLine(char *path, int numLine){
         perror("fopen");
         return NULL;
     }
-    char *line = calloc(sizeof(char), 64);
+    char *line = calloc(sizeof(char), 28);
     int i = 1;
     while(!feof(file)){
-        fgets(line, 64, file);
+        fgets(line, 28, file);
         if(i == numLine){
             fclose(file);
             line[strlen(line)-1] = '\0';
