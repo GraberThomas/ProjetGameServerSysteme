@@ -22,7 +22,7 @@
 #define MSG_SAVE_FAILED "Bye, save the result failed"
 #define MSG_ENTER_PSEUDO "Enter your pseudo : "
 #define MSG_ENTER_PSEUDO_ERROR "Error : the pseudo is to short, or it contains space(s)"
-#define TIMER 4
+#define TIMER 10
 #define ERROR_CODE_COMM  63
 #define STD_IN 0
 #define STD_OUT 1 
