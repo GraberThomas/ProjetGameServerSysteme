@@ -31,6 +31,7 @@ char *string;
 char *string2;
 struct game *game;
 pid_t pid_client;
+
 struct game{
     int *nb_error_max;
     int nb_current_error;
@@ -217,6 +218,12 @@ int saveGameResult(struct game *game, char *pseudo){
 //handler for SIGINT
 void handler_sigint(int sig){
     fprintf(stderr, "Je suis un fils et j'ai recu le signal SIGINT\n");
+    if(kill(pid_client, SIGUSR2) == -1) {
+        fprintf(stderr, "%d : Error : kill %d\n", getpid(), pid_client);
+        exit(ERROR_CODE_COMM);
+    }
+    all_destroy();
+    exit(89);
 }
 
 int main(int argc, char **argv){
