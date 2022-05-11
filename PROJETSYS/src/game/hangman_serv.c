@@ -22,7 +22,7 @@
 #define MSG_SAVE_FAILED "Bye, save the result failed"
 #define MSG_ENTER_PSEUDO "Enter your pseudo : "
 #define MSG_ENTER_PSEUDO_ERROR "Error : the pseudo is to short, or it contains space(s)"
-#define TIMER 100
+#define TIMER 10
 #define ERROR_CODE_COMM  63
 #define STD_IN 0
 #define STD_OUT 1 
@@ -31,7 +31,6 @@ char *string;
 char *string2;
 struct game *game;
 pid_t pid_client;
-
 struct game{
     int *nb_error_max;
     int nb_current_error;
@@ -215,7 +214,6 @@ int saveGameResult(struct game *game, char *pseudo){
     }
     return 0;
 }
-
 //handler for SIGINT
 void handler_sigint(int sig){
     fprintf(stderr, "Je suis un fils et j'ai recu le signal SIGINT\n");
@@ -232,8 +230,9 @@ int main(int argc, char **argv){
         fprintf(stderr,"%s\n", argv[i]);
     }
     srand(getpid());
+    // Verify args sent by client
     verifyArgs(argc, argv);
-    argv++;// Verify args sent by client
+    argv++;
     int nb_words = countLines("./out/game/dictionnaire.txt");
     if(nb_words == 0) {
         fprintf(stderr, "Error : no words in the dictionary\n");
@@ -267,8 +266,7 @@ int main(int argc, char **argv){
         if(send_string(STD_OUT, string) != 0) {
             free(string);
             string=NULL;
-            fprintf(stderr, MSG_ER
-Mis en place du TIMER ROR_COMM);
+            fprintf(stderr, MSG_ERROR_COMM);
             all_destroy();
             exit(ERROR_CODE_COMM);
         }
@@ -384,8 +382,10 @@ Mis en place du TIMER ROR_COMM);
             if(send_int(STD_OUT, 0) != 0) {
                 fprintf(stderr, MSG_ERROR_COMM);
                 all_destroy();
-                exit(ERR
-Mis en place du TIMER 
+                exit(ERROR_CODE_COMM);
+            }
+            break;
+        }else{
             if(send_int(STD_OUT, 1) != 0) {
                 fprintf(stderr, MSG_ERROR_COMM);
                 all_destroy();
