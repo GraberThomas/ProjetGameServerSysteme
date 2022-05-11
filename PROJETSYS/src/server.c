@@ -1,3 +1,6 @@
+//CODE ERREUR142
+//BUG AVEC LES pid_childs
+
 #define _DEFAULT_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,6 +20,8 @@
 
 volatile int usr1_receive = 0;
 int pid_client;
+int *pid_childs;
+int nb_clients = 0;
 
 /**
     * @brief Check if the given file exists
@@ -42,6 +47,17 @@ int serv_exit(int error, char *msg) {
         fprintf(stderr, "Error deleting server pid file\n");
         perror("unlink");
     }
+    int res;
+    for(int i = 0; i < nb_clients; i++){
+        fprintf(stderr, "pid_childs[%d] = %d\n", i, pid_childs[i]);
+        if(pid_childs[i] != 0){
+            if(waitpid(pid_childs[i], &res, WNOHANG) == -1){
+                if(res != 0){
+                    fprintf(stderr, "Error waiting for client %d\n", pid_childs[i]);
+                }
+            }
+        }
+    }
     fprintf(stderr, "%s\n", msg);
     exit(error);
 }
@@ -53,24 +69,61 @@ void handSIGUSR1(int sig) {
 //handler for sigint
 void handSIGINT(int sig){
     //printf("PID DU CLIENT: %d\n", pid_client);
-    if(pid_client != 0){
-        if(kill(pid_client,SIGUSR2) == -1 && errno != ESRCH){
-            perror("kill");
+    for(int i = 0; i < nb_clients; i++){
+        if(pid_childs[i] != 0){
+            if(kill(pid_childs[i], SIGUSR2) != 0){
+                fprintf(stderr, "Error killing client %d\n", pid_childs[i]);
+            }
         }
     }
-    if(fork() == 0){
-        execl("/bin/bash", "/bin/bash", "-c", "rm -f /tmp/game_server/*.fifo", NULL);
-        //system("rm /tmp/game_server/*");
-        perror("rm");
-    }
-    wait(NULL);
     serv_exit(0, "\nServer interrupted by user\n");
 }
 
+//handler for sigchld
+void handSIGCHLD(int sig){
+    fprintf(stderr, "SIGCHLD\n");
+    int status;
+    pid_t pid_wait = wait(&status);
+    //pid_wait--;
+    fprintf(stderr, "pid=%d\n", pid_wait);
+    for(int i = 0 ; i < nb_clients; i++){
+        if(pid_wait == pid_childs[i]){
+            fprintf(stderr, "yo\n");
+            pid_childs[i] = 0;
+            break;
+        }
+    }
+    if(pid_wait == -1){
+        fprintf(stderr, "Error waiting for child\n");
+        perror("wait");
+    }
+    if (WIFEXITED(status)) {
+        printf("%d : exited, status=%d\n", pid_wait, WEXITSTATUS(status));
+    } else if (WIFSIGNALED(status)) {
+        printf("%d : killed by signal %d\n", pid_wait, WTERMSIG(status));
+    } else if (WIFSTOPPED(status)) {
+        printf("%d : stopped by signal %d\n", pid_wait, WSTOPSIG(status));
+    } else if (WIFCONTINUED(status)) {
+        printf("%d : continued\n", pid_wait);
+    }
+
+}
+
+
 int main(int argc, char **argv){
+    pid_childs = malloc(sizeof(int) * 1);
     if(checkIfFileExists(SERVER_PID_FILE)){
         fprintf(stderr, "The server is already running\n");
         exit(1);
+    }
+    struct sigaction actCHILD;
+    actCHILD.sa_handler = handSIGCHLD;
+    actCHILD.sa_flags = 0;
+    sigemptyset(&actCHILD.sa_mask);
+    if(sigaction(SIGCHLD, &actCHILD, NULL) == -1){
+        fprintf(stderr, "Error setting SIGCHLD handler\n");
+        perror("sigaction");
+        exit(45);
     }
     struct sigaction actINT;
     sigemptyset(&actINT.sa_mask);
@@ -116,7 +169,7 @@ int main(int argc, char **argv){
     sigemptyset(&act.sa_mask);
     if(sigaction(SIGUSR1, &act, NULL) == -1){
         perror("sigaction");
-        serv_exit(7, "Error while setting the signal handler\n");
+        serv_exit(7, "Error while setting the sigrecv_stringnal handler\n");
     }
     int fd_fifo;
     int childResult;
@@ -164,12 +217,28 @@ int main(int argc, char **argv){
                 usr1_receive = 0;
                 continue;
             }else{
+                nb_clients++;
                 pid_game = fork();
-                if (pid_game == -1) {
+                if(pid_game == -1){
                     perror("fork");
                     serv_exit(10, "Error while forking the game\n");
                 }
+                if (pid_game > 0) {
+                    pid_childs[nb_clients-1] = pid_game;
+                    for(int i = 0 ; i <= nb_clients; i++){
+                        fprintf(stderr, "%d : Client %d is alive\n", i, pid_childs[i]);
+                    }
+                }
+                int *res = reallocarray(pid_childs, nb_clients + 1, sizeof(int));
+                if (res == NULL) {
+                    perror("realloc");
+                    serv_exit(11, "Error while reallocating the array of pid_childs\n");
+                }
                 if (pid_game == 0) {
+                    pid_childs[nb_clients-1] = getpid();
+                    for(int i = 0 ; i <= nb_clients; i++){
+                        fprintf(stderr, "%d : Client %d is alive\n", i, pid_childs[i]);
+                    }
                     int nbArguments= 0;
                     if(read(fd_fifo, &nbArguments, sizeof(int)) == -1){
                         fprintf(stderr, "Error while reading the number of arguments\n");
@@ -179,6 +248,15 @@ int main(int argc, char **argv){
                     }
                     if(nbArguments != 0){
                         argv_game = recv_argv(fd_fifo);
+                        int * test = reallocarray(argv_game, nbArguments+1, sizeof(char*));
+                        if(test == NULL){
+                            perror("realloc");
+                            serv_exit(11, "Error while reallocating the arguments\n");
+                        }
+                        for(int k = nbArguments; k >= 0; k--){
+                            argv_game[k] = argv_game[k-1];
+                        }
+                        argv_game[0] = itoa(pid_client);
                         if(argv_game == NULL){
                             fprintf(stderr, "Error while receiving the arguments of the game\n");
                             usr1_receive = 0;
@@ -203,6 +281,7 @@ int main(int argc, char **argv){
                         perror("kill");
                         serv_exit(12, "Error while send signal to the client\n");
                     }
+                    fprintf(stderr, "je passe\n");
                     int fd_0 = open(pathPipe0, O_RDONLY);
                     if (fd_0 == -1) {
                         perror("open");
@@ -236,16 +315,16 @@ int main(int argc, char **argv){
             }
             free(gameName);
             free(gamePath);
-            wait(&childResult);
-            if (WIFEXITED(childResult)) {
-                printf("exited, status=%d\n", WEXITSTATUS(childResult));
-            } else if (WIFSIGNALED(childResult)) {
-                printf("killed by signal %d\n", WTERMSIG(childResult));
-            } else if (WIFSTOPPED(childResult)) {
-                printf("stopped by signal %d\n", WSTOPSIG(childResult));
-            } else if (WIFCONTINUED(childResult)) {
-                printf("continued\n");
-            }
+            // wait(&childResult);
+            // if (WIFEXITED(childResult)) {
+            //     printf("exited, status=%d\n", WEXITSTATUS(childResult));
+            // } else if (WIFSIGNALED(childResult)) {
+            //     printf("killed by signal %d\n", WTERMSIG(childResult));
+            // } else if (WIFSTOPPED(childResult)) {
+            //     printf("stopped by signal %d\n", WSTOPSIG(childResult));
+            // } else if (WIFCONTINUED(childResult)) {
+            //     printf("continued\n");
+            // }
             usr1_receive = 0;    
         }
     }

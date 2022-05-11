@@ -49,6 +49,7 @@ void handler_usr2(int sig){
 }
 
 int main(int argc, char **argv){
+    fprintf(stderr, "pid du client : %d\n", getpid());
     sigset_t set;
     sigset_t oldset;
     sigemptyset(&set);
@@ -77,12 +78,6 @@ int main(int argc, char **argv){
         perror("read");
         exit(7);
     }
-    int game_client_pid = open(CLIENT_PID_FILE,O_CREAT|O_WRONLY, 000774);
-    if(write(game_client_pid, &pid_client, sizeof(pid_t)) == -1){
-        perror("write");
-        exit(22);
-    }
-    close(game_client_pid);
     struct sigaction actSigUsr1;
     struct sigaction actSigUsr2;
     sigemptyset(&actSigUsr1.sa_mask);
@@ -170,8 +165,8 @@ int main(int argc, char **argv){
     char *path_game = calloc(sizeof(int), strlen(PATH_GAMES_OUT)+strlen(argv[1])+strlen("_cli")+1);
     sprintf(path_game, "%s%s_cli", PATH_GAMES_OUT, argv[1]);
     fprintf(stderr,"je vais executer\n");
-    //execvp(path_game, argv+1);
-    execlp("valgrind", "valgrind", "-s","--leak-check=full", "--show-leak-kinds=all",path_game,"-n","3",NULL);
+    execvp(path_game, argv+1);
+    //execlp("valgrind", "valgrind", "-s","--leak-check=full", "--show-leak-kinds=all",path_game,"-n","3",NULL);
     fprintf(stdout, "Error while executing the game\n");
     free(path_game);
 }

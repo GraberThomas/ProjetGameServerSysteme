@@ -49,6 +49,7 @@ void handler_alrm(int sig){
 }
 
 int main(int argc, char **argv){
+    fprintf(stderr, "pid du client : %d\n", getpid());
     // server indicates if arguments are valid or not
     int valid_argv = recv_int(SERV_IN_FILENO);
     if (valid_argv == -1){
