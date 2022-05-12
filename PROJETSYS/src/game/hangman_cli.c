@@ -48,8 +48,22 @@ void handler_alrm(int sig){
     exit(0);
 }
 
+//handler for sigUSR2
+void handler_usr2(int sig){
+    fprintf(stderr, "\nThe server is down\nExit\n");
+    all_destroy();
+    exit(0);
+}
+
 int main(int argc, char **argv){
-    fprintf(stderr, "pid du client : %d\n", getpid());
+    struct sigaction sa;
+    sa.sa_handler = handler_usr2;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = 0;
+    if(sigaction(SIGUSR2, &sa, NULL) == -1){
+        perror("sigaction");
+        exit(1);
+    }
     // server indicates if arguments are valid or not
     int valid_argv = recv_int(SERV_IN_FILENO);
     if (valid_argv == -1){

@@ -20,7 +20,6 @@
 
 volatile int usr1_receive = 0;
 int pid_client;
-int nb_clients = 0;
 
 /**
     * @brief Check if the given file exists
@@ -56,13 +55,48 @@ void handSIGUSR1(int sig) {
 
 //handler for sigint
 void handSIGINT(int sig){
-    while(wait(NULL) != -1);
-    serv_exit(0, "Client disconnected");
+    //block SIGCHLD
+    sigset_t mask;
+    sigemptyset(&mask);
+    sigaddset(&mask, SIGCHLD);
+    sigprocmask(SIG_BLOCK, &mask, NULL);
+    int pid = 0;
+    int result;
+    while(pid != -1){
+        pid = wait(&result);
+        if(pid == -1){
+            break;
+        }
+        if (WIFEXITED(result)) {
+            fprintf(stderr,"%d : exited, status=%d\n",pid, WEXITSTATUS(result));
+        } else if (WIFSIGNALED(result)) {
+            fprintf(stderr, "%d : killed by signal %d\n",pid, WTERMSIG(result));
+        } else if (WIFSTOPPED(result)) {
+            fprintf(stderr, "%d : stopped by signal %d\n",pid, WSTOPSIG(result));
+        } else if (WIFCONTINUED(result)) {
+            fprintf(stderr, "%d : continued\n",pid);
+        }
+    }
+    serv_exit(0, "\nServer interrupted by user\n");
 }
 
 //handler for sigchld
 void handSIGCHLD(int sig){
-    
+    int result;
+    int pid = wait(&result);
+    if(pid == -1){
+        perror("wait");
+        serv_exit(1, "Error in wait\n");
+    }
+    if (WIFEXITED(result)) {
+        fprintf(stderr, "%d : exited, status=%d\n",pid, WEXITSTATUS(result));
+    } else if (WIFSIGNALED(result)) {
+        fprintf(stderr, "%d : killed by signal %d\n",pid, WTERMSIG(result));
+    } else if (WIFSTOPPED(result)) {
+        fprintf(stderr, "%d : stopped by signal %d\n",pid, WSTOPSIG(result));
+    } else if (WIFCONTINUED(result)) {
+        fprintf(stderr, "%d : continued\n",pid);
+    }
 }
 
 
@@ -85,6 +119,16 @@ int main(int argc, char **argv){
     actINT.sa_flags = 0;
     actINT.sa_handler = handSIGINT;
     if(sigaction(SIGINT, &actINT, NULL) == -1){
+        write(2, "Error setting SIGINT handler\n", 27);
+        perror("sigaction");
+        serv_exit(1, "Error setting SIGINT handler\n");
+    }
+    if(sigaction(SIGQUIT, &actINT, NULL) == -1){
+        write(2, "Error setting SIGINT handler\n", 27);
+        perror("sigaction");
+        serv_exit(1, "Error setting SIGINT handler\n");
+    }
+    if(sigaction(SIGTERM, &actINT, NULL) == -1){
         write(2, "Error setting SIGINT handler\n", 27);
         perror("sigaction");
         serv_exit(1, "Error setting SIGINT handler\n");
@@ -171,7 +215,6 @@ int main(int argc, char **argv){
                 usr1_receive = 0;
                 continue;
             }else{
-                nb_clients++;
                 pid_game = fork();
                 if(pid_game == -1){
                     perror("fork");
@@ -187,12 +230,13 @@ int main(int argc, char **argv){
                     }
                     if(nbArguments != 0){
                         argv_game = recv_argv(fd_fifo);
-                        int * test = reallocarray(argv_game, nbArguments+1, sizeof(char*));
+                        char ** test = reallocarray(argv_game, nbArguments+2, sizeof(char*));
                         if(test == NULL){
                             perror("realloc");
                             serv_exit(11, "Error while reallocating the arguments\n");
                         }
-                        for(int k = nbArguments; k >= 0; k--){
+                        argv_game = test;
+                        for(int k = nbArguments+1; k > 0; k--){
                             argv_game[k] = argv_game[k-1];
                         }
                         argv_game[0] = itoa(pid_client);
@@ -220,7 +264,6 @@ int main(int argc, char **argv){
                         perror("kill");
                         serv_exit(12, "Error while send signal to the client\n");
                     }
-                    fprintf(stderr, "je passe\n");
                     int fd_0 = open(pathPipe0, O_RDONLY);
                     if (fd_0 == -1) {
                         perror("open");
@@ -242,7 +285,7 @@ int main(int argc, char **argv){
                     close(fd_0);
                     close(fd_1);
                     execv(gamePath, argv_game);
-                    //execlp("valgrind", "valgrind", "-s","--leak-check=full", "--show-leak-kinds=all",gamePath,"-n","3",NULL);
+                    //execlp("valgrind", "valgrind", "-s","--leak-check=full", "--show-leak-kinds=all", gamePath,"-n","5",NULL);
                     perror("execv");
                     usr1_receive = 0;
                     free(gameName);
@@ -254,16 +297,6 @@ int main(int argc, char **argv){
             }
             free(gameName);
             free(gamePath);
-            // wait(&childResult);
-            // if (WIFEXITED(childResult)) {
-            //     printf("exited, status=%d\n", WEXITSTATUS(childResult));
-            // } else if (WIFSIGNALED(childResult)) {
-            //     printf("killed by signal %d\n", WTERMSIG(childResult));
-            // } else if (WIFSTOPPED(childResult)) {
-            //     printf("stopped by signal %d\n", WSTOPSIG(childResult));
-            // } else if (WIFCONTINUED(childResult)) {
-            //     printf("continued\n");
-            // }
             usr1_receive = 0;    
         }
     }

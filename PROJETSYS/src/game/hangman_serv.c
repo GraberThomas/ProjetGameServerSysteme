@@ -121,9 +121,6 @@ char *getStringOfCurrentWordToFind(struct game *game){
 }
 
 void verifyArgs(int argc, char *argv[]) {
-    for(int i = 0 ; i < argc ; i++) {
-        fprintf(stderr, "%s\n", argv[i]);
-    }
     if(argc != 2 && argc != 4) {
         fprintf(stderr, MSG_ERROR_ARGUMENTS);
         if(send_int(STD_OUT, 0) == 1) {
@@ -217,7 +214,6 @@ int saveGameResult(struct game *game, char *pseudo){
 }
 //handler for SIGINT
 void handler_sigint(int sig){
-    fprintf(stderr, "Je suis un fils et j'ai recu le signal SIGINT\n");
     if(kill(pid_client, SIGUSR2) == -1) {
         fprintf(stderr, "%d : Error : kill %d\n", getpid(), pid_client);
         exit(ERROR_CODE_COMM);
@@ -233,9 +229,6 @@ int main(int argc, char **argv){
     saINT.sa_flags = 0;
     sigaction(SIGINT, &saINT, NULL);
     pid_client = atoi(argv[0]);
-    for(int i = 0 ; i < argc ; i++) {
-        fprintf(stderr,"%s\n", argv[i]);
-    }
     srand(getpid());
     // Verify args sent by client
     verifyArgs(argc, argv);
@@ -414,7 +407,6 @@ int main(int argc, char **argv){
         strcat(string, "\", you have ");
         strcat(string, string2);
         strcat(string, " errors");
-        fprintf(stderr, "Win !");
         if(send_string(STD_OUT, string) != 0) {
             fprintf(stderr, MSG_ERROR_COMM);
             all_destroy();

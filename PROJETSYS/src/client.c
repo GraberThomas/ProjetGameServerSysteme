@@ -39,7 +39,7 @@ void verifyArgs(int argc, char **argv) {
 
 //handler for SIGUSR1
 void handler_usr1(int sig){
-    fprintf(stderr,"je recois usr1\n");
+    
 }
 
 //handler for SIGUSR2
@@ -49,13 +49,11 @@ void handler_usr2(int sig){
 }
 
 int main(int argc, char **argv){
-    fprintf(stderr, "pid du client : %d\n", getpid());
     sigset_t set;
     sigset_t oldset;
     sigemptyset(&set);
     sigaddset(&set, SIGUSR1);
     sigprocmask(SIG_BLOCK, &set, &oldset);
-    fprintf(stderr, "je passe ici\n");
     pid_t pid_client = getpid();
     pid_t pid_server;
     verifyArgs(argc, argv);
@@ -125,13 +123,10 @@ int main(int argc, char **argv){
             exit(15);
         }
     }
-
-    fprintf(stderr, "je me met en pause\n");
     sigset_t new = oldset;
     sigdelset(&new, SIGUSR1);
     sigsuspend(&new);
     sigprocmask(SIG_SETMASK, &oldset, NULL);
-    fprintf(stderr, "je me resume\n");
     char *string = getPathFIFO(pid_client, 0);
     int fd0 = open(string, O_WRONLY);
     free(string);
@@ -164,7 +159,6 @@ int main(int argc, char **argv){
     close(fd1);
     char *path_game = calloc(sizeof(int), strlen(PATH_GAMES_OUT)+strlen(argv[1])+strlen("_cli")+1);
     sprintf(path_game, "%s%s_cli", PATH_GAMES_OUT, argv[1]);
-    fprintf(stderr,"je vais executer\n");
     execvp(path_game, argv+1);
     //execlp("valgrind", "valgrind", "-s","--leak-check=full", "--show-leak-kinds=all",path_game,"-n","3",NULL);
     fprintf(stdout, "Error while executing the game\n");
