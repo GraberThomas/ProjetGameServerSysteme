@@ -16,6 +16,7 @@
 #define PSEUDO_MAX_SIZE 10
 
 char *string = NULL;
+int pid_serv;
 
 void all_destroy(void) {
     if(string != NULL) {
@@ -52,17 +53,43 @@ void handler_alrm(int sig){
 void handler_usr2(int sig){
     fprintf(stderr, "\nThe server is down\nExit\n");
     all_destroy();
+    exit(87);
+}
+
+//handler for sigINT
+void handler_int(int sig){
+    fprintf(stdout, "\nExit\n");
+    if(kill(pid_serv, SIGUSR2) == -1){
+        perror("kill");
+        all_destroy();
+        exit(97);
+    }
+    all_destroy();
     exit(0);
 }
 
 int main(int argc, char **argv){
-    struct sigaction sa;
-    sa.sa_handler = handler_usr2;
-    sigemptyset(&sa.sa_mask);
-    sa.sa_flags = 0;
-    if(sigaction(SIGUSR2, &sa, NULL) == -1){
-        perror("sigaction");
-        exit(1);
+    struct sigaction saUSR2;
+    struct sigaction saInt;
+    saUSR2.sa_handler = handler_usr2;
+    saInt.sa_handler = handler_int;
+    sigemptyset(&saInt.sa_mask);
+    sigemptyset(&saUSR2.sa_mask);
+    saUSR2.sa_flags = 0;
+    saInt.sa_flags = 0;
+    if(sigaction(SIGUSR2, &saUSR2, NULL) == -1){
+        perror("sigaction USR2");
+        exit(27);
+    }
+    if(sigaction(SIGINT, &saInt, NULL) == -1){
+        perror("sigaction INT");
+        exit(27);
+    }
+    pid_serv = recv_int(SERV_IN_FILENO);
+    if(pid_serv == -1){
+        fprintf(stderr, "%s\n",MSG_ERROR_COMM);
+        all_destroy();
+        exit(61);
     }
     // server indicates if arguments are valid or not
     int valid_argv = recv_int(SERV_IN_FILENO);
@@ -151,23 +178,25 @@ int main(int argc, char **argv){
         while(input_ok == 0){
             fprintf(stdout, "Choice %d, enter a letter :", nb_choice);
             char_input = getchar();
+            emptyBuffer();
             if(char_input == '\n'){
                 fprintf(stdout, "Invalid letter.\n");
                 continue;
             }
-            emptyBuffer();
-            input_ok = _isAlpha(char_input);
-            if(!input_ok){
-                fprintf(stdout, "Invalid letter.\n");
+            if(send_char(SERV_OUT_FILENO, char_input) == -1){
+                fprintf(stderr, "%s\n",MSG_ERROR_COMM);
+                all_destroy();
+                exit(ERROR_CODE_COMM);
+            }
+            input_ok = recv_int(SERV_IN_FILENO);
+            if(input_ok == -1){
+                fprintf(stderr, "%s\n",MSG_ERROR_COMM);
+                all_destroy();
+                exit(ERROR_CODE_COMM);
+            }else if(input_ok == 0){
+                fprintf(stderr, "Invalid letter. Retry.\n");
             }
         }
-        //send the letter to the server
-        if(send_char(SERV_OUT_FILENO, char_input) != 0){
-            fprintf(stderr, "%s\n",MSG_ERROR_COMM);
-            all_destroy();
-            exit(ERROR_CODE_COMM);
-        }
-        input_ok = 0;
         nb_choice++;
 
         //receive the answer of the server

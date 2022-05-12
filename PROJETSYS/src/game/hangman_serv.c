@@ -41,16 +41,16 @@ struct game{
 };
 
 void all_destroy(){
-    if(game->nb_error_max != NULL){
-        free(game->nb_error_max);
-    }
-    if(game->complete_word != NULL){
-        free(game->complete_word);
-    }
-    if(game->current_word_display != NULL){
-        free(game->current_word_display);
-    }
     if(game != NULL){
+        if(game->nb_error_max != NULL){
+            free(game->nb_error_max);
+        }
+        if(game->complete_word != NULL){
+            free(game->complete_word);
+        }
+        if(game->current_word_display != NULL){
+            free(game->current_word_display);
+        }
         free(game);
     }
     if(string != NULL){
@@ -121,6 +121,12 @@ char *getStringOfCurrentWordToFind(struct game *game){
 }
 
 void verifyArgs(int argc, char *argv[]) {
+    for(int i = 1 ; i < argc ; i++) {
+        if(strcmp(argv[i], "-h") == 0) {
+            printf("%s", MSG_ERROR_ARGUMENTS);
+            exit(0);
+        }
+    }
     if(argc != 2 && argc != 4) {
         fprintf(stderr, MSG_ERROR_ARGUMENTS);
         if(send_int(STD_OUT, 0) == 1) {
@@ -229,14 +235,37 @@ void handler_sigint(int sig){
     exit(89);
 }
 
+//handler for SIGUSR2
+void handler_sigusr2(int sig){
+    fprintf(stderr, "%d : Error : Client disconnected\n", getpid());
+    all_destroy();
+    exit(90);
+}
+
 int main(int argc, char **argv){
-    fprintf(stderr, "%d\n", argc);
     struct sigaction saINT;
     saINT.sa_handler = handler_sigint;
     sigemptyset(&saINT.sa_mask);
     saINT.sa_flags = 0;
-    sigaction(SIGINT, &saINT, NULL);
+    if(sigaction(SIGINT, &saINT, NULL) == -1) {
+        fprintf(stderr, "%d : Error : sigaction\n", getpid());
+        perror("sigaction");
+        exit(27);
+    }
+    struct sigaction saUSR2;
+    saUSR2.sa_handler = handler_sigusr2;
+    sigemptyset(&saUSR2.sa_mask);
+    saUSR2.sa_flags = 0;
+    if(sigaction(SIGUSR2, &saUSR2, NULL) == -1) {
+        fprintf(stderr, "%d : Error : sigaction\n", getpid());
+        perror("sigaction");
+        exit(27);
+    }
     pid_client = atoi(argv[1]);
+    if(send_int(STD_OUT, getpid()) == 1) {
+        fprintf(stderr, MSG_ERROR_COMM);
+        exit(ERROR_CODE_COMM);
+    }
     srand(getpid());
     // Verify args sent by client
     verifyArgs(argc, argv);
@@ -338,6 +367,20 @@ int main(int argc, char **argv){
                 fprintf(stderr, MSG_ERROR_COMM);
                 all_destroy();
                 exit(ERROR_CODE_COMM);
+            }
+            if(! _isAlpha(char_input)) {
+                if(send_int(STD_OUT, 0) != 0) {
+                    fprintf(stderr, MSG_ERROR_COMM);
+                    all_destroy();
+                    exit(ERROR_CODE_COMM);
+                }
+                continue;
+            }else{
+                if(send_int(STD_OUT, 1) != 0) {
+                    fprintf(stderr, MSG_ERROR_COMM);
+                    all_destroy();
+                    exit(ERROR_CODE_COMM);
+                }
             }
             if(char_input >= 'A' && char_input <= 'Z') {
                 char_input = char_input - 'A' + 'a';

@@ -299,7 +299,7 @@ int main(int argc, char **argv){
                     close(fd_0);
                     close(fd_1);
                     execv(gamePath, argv_game);
-                    //execlp("valgrind", "valgrind", "-s","--leak-check=full", "--show-leak-kinds=all", gamePath, "-n","5",NULL);
+                    //execlp("valgrind", "valgrind", "-s","--leak-check=full", "--show-leak-kinds=all", gamePath,itoa(pid_client), "-n","5",NULL);
                     perror("execv");
                     usr1_receive = 0;
                     free(gameName);
