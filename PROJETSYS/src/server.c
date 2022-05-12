@@ -235,11 +235,25 @@ int main(int argc, char **argv){
                             perror("realloc");
                             serv_exit(11, "Error while reallocating the arguments\n");
                         }
+                        // nbArguments = 3
+                        // argv[0] = hangmann
+                        // argv[1] = -n;
+                        // argv[2] = 5; //-N
+                        // argv[3] = NULL; // 5
+                        // argv[4] = nonAlloced; //NULL
+
                         argv_game = test;
-                        for(int k = nbArguments+1; k > 0; k--){
+                        for(int k = nbArguments+1; k > 1; k--){
                             argv_game[k] = argv_game[k-1];
                         }
-                        argv_game[0] = itoa(pid_client);
+                        argv_game[1] = itoa(pid_client);
+                        for(int l = 0 ; l < nbArguments +2; l++){
+                            fprintf(stderr,"%s\n", argv_game[l]);
+                        }
+                        // for(int k = nbArguments+1; k > 0; k--){
+                        //     argv_game[k] = argv_game[k-1];
+                        // }
+                        // argv_game[0] = itoa(pid_client);
                         if(argv_game == NULL){
                             fprintf(stderr, "Error while receiving the arguments of the game\n");
                             usr1_receive = 0;
@@ -285,7 +299,7 @@ int main(int argc, char **argv){
                     close(fd_0);
                     close(fd_1);
                     execv(gamePath, argv_game);
-                    //execlp("valgrind", "valgrind", "-s","--leak-check=full", "--show-leak-kinds=all", gamePath,"-n","5",NULL);
+                    //execlp("valgrind", "valgrind", "-s","--leak-check=full", "--show-leak-kinds=all", gamePath, "-n","5",NULL);
                     perror("execv");
                     usr1_receive = 0;
                     free(gameName);

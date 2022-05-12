@@ -73,9 +73,9 @@ void sig_handler(int sig){
 }
 
 void initGame(struct game *game, int argc, char *argv[], char *secretWord){
-    if(argc == 3) {
+    if(argc == 4) {
         game->nb_error_max = malloc(sizeof(int));
-        *game->nb_error_max = atoi(argv[2]);
+        *game->nb_error_max = atoi(argv[3]);
     }else{
         game->nb_error_max = NULL;
     }
@@ -136,6 +136,13 @@ void verifyArgs(int argc, char *argv[]) {
         all_destroy();
         exit(1);
     }
+    /*
+        hangmaan
+        pid
+        -n
+        5
+
+    */
     if(argc == 4){
         if(strcmp(argv[2], "-n") != 0){
             if(send_int(STD_OUT, 0) == 1) {
@@ -143,7 +150,7 @@ void verifyArgs(int argc, char *argv[]) {
                 all_destroy();
                 exit(ERROR_CODE_COMM);
             }
-            char *a = malloc(sizeof(char ) * (strlen("Error : the option ") + strlen(argv[1]) + strlen(" is not supported\n")+ 1));
+            char *a = malloc(sizeof(char ) * (strlen("Error : the option ") + strlen(argv[2]) + strlen(" is not supported\n")+ 1));
             strcpy(a, "Error : the option ");
             strcat(a, argv[2]);
             strcat(a, " is not supported");
@@ -223,16 +230,16 @@ void handler_sigint(int sig){
 }
 
 int main(int argc, char **argv){
+    fprintf(stderr, "%d\n", argc);
     struct sigaction saINT;
     saINT.sa_handler = handler_sigint;
     sigemptyset(&saINT.sa_mask);
     saINT.sa_flags = 0;
     sigaction(SIGINT, &saINT, NULL);
-    pid_client = atoi(argv[0]);
+    pid_client = atoi(argv[1]);
     srand(getpid());
     // Verify args sent by client
     verifyArgs(argc, argv);
-    argv++;
     int nb_words = countLines("./out/game/dictionnaire.txt");
     if(nb_words == 0) {
         fprintf(stderr, "Error : no words in the dictionary\n");
@@ -248,7 +255,7 @@ int main(int argc, char **argv){
     char *secretWord = getWordByNumLine("./out/game/dictionnaire.txt", number_of_the_word);
     fprintf(stderr, "Secret word : %s\n", secretWord);
     game = malloc(sizeof(struct game));
-    initGame(game, argc-1, argv, secretWord);
+    initGame(game, argc, argv, secretWord);
     // Send the welcome message
     if(send_string(STD_OUT, MSG_WELCOME) != 0) {
         fprintf(stderr, MSG_ERROR_COMM);
@@ -257,10 +264,10 @@ int main(int argc, char **argv){
     }
     //Send the number of tries
     if(game->nb_error_max != NULL) {
-        size_t size = strlen("You are allowed ") + strlen(argv[2]) + strlen(" errors\n");
+        size_t size = strlen("You are allowed ") + strlen(argv[3]) + strlen(" errors\n");
         string = malloc(sizeof(char) * (size + 1));
         strcpy(string, "You are allowed ");
-        strcat(string, argv[2]);
+        strcat(string, argv[3]);
         strcat(string, " errors");
         string[size] = '\0';
         if(send_string(STD_OUT, string) != 0) {
@@ -337,7 +344,7 @@ int main(int argc, char **argv){
             }
         } while (!_isAlpha(char_input));
         game->nb_tries++;
-        string = calloc(strlen("Good choice, ") + strlen("you are still entlited to ")+strlen(" errors") + strlen(argv[2]) + 1, sizeof(char));
+        string = calloc(strlen("Good choice, ") + strlen("you are still entlited to ")+strlen(" errors") + strlen(argv[3]) + 1, sizeof(char));
         
         if(verifyAnswer(game, char_input) == 1) {
             if(game->nb_error_max == NULL) {
