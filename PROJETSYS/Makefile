@@ -12,6 +12,7 @@ LDFLAGS=-g
 
 all : create_folders server client $(PATH_GAME_OUT)/test_serv $(PATH_GAME_OUT)/test_cli $(PATH_GAME_OUT)/hangman_serv $(PATH_GAME_OUT)/hangman_cli
 
+# Create folders for output
 create_folders : 
 	@mkdir -p ${PATH_LIB_OUT}
 	@mkdir -p ${PATH_LIB_OUT}/libmessage
@@ -19,63 +20,59 @@ create_folders :
 	@mkdir -p ${PATH_OUT}/game
 	@cp $(PATH_GAME_SRC)/dictionnaire.txt ${PATH_GAME_OUT}/dictionnaire.txt
 
-# Server dependencies
+#--------------------------------BUILD THE EXECUTABLE-------------------------------------------
+# Server
 server : $(PATH_OUT)/server.o $(PATH_LIB_OUT)/libmessage.so $(PATH_LIB_OUT)/libprojectUtil.so
 	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $< -lmessage -lprojectUtil
 
-# Client dependencies
+# Client
 client : $(PATH_OUT)/client.o $(PATH_LIB_OUT)/libmessage.so $(PATH_LIB_OUT)/libprojectUtil.so
 	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $< -lmessage -lprojectUtil
 
+#--------------------------------BUILD THE GAME-------------------------------------------
+#test_serv
 $(PATH_GAME_OUT)/test_serv : $(PATH_GAME_OUT)/test_serv.o $(PATH_LIB_OUT)/libmessage.so
 	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $< -lmessage
-
+#test_cli
 $(PATH_GAME_OUT)/test_cli : $(PATH_GAME_OUT)/test_cli.o $(PATH_LIB_OUT)/libmessage.so
 	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $< -lmessage
-
+#hangman_serv
 $(PATH_GAME_OUT)/hangman_serv : $(PATH_GAME_OUT)/hangman_serv.o $(PATH_LIB_OUT)/libmessage.so $(PATH_LIB_OUT)/libprojectUtil.so
 	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $< -lmessage -lprojectUtil
-
+#hangman_cli
 $(PATH_GAME_OUT)/hangman_cli : $(PATH_GAME_OUT)/hangman_cli.o $(PATH_LIB_OUT)/libmessage.so $(PATH_LIB_OUT)/libprojectUtil.so
 	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $< -lmessage -lprojectUtil
 
-#build the shared libraries
+#--------------------------------BUILD THE SHARED LIBRARIES-------------------------------------------
+#libmessage
 $(PATH_LIB_OUT)/libmessage.so : $(PATH_LIB_OUT)/libmessage/libmessage.o
 	$(CC) $(LDFLAGS) -shared -o $(PATH_LIB_OUT)/libmessage.so $(PATH_LIB_OUT)/libmessage/libmessage.o
 
+#libprojectUtil
+$(PATH_LIB_OUT)/libprojectUtil.so : $(PATH_LIB_OUT)/libprojectUtil/libprojectUtil.o
+	$(CC) $(LDFLAGS) -shared -o $(PATH_LIB_OUT)/libprojectUtil.so $(PATH_LIB_OUT)/libprojectUtil/libprojectUtil.o
 
-$(PATH_LIB_OUT)/libprojectUtil.so : $(PATH_LIB_OUT)/libprojectUtil/projectUtil.o
-	$(CC) $(LDFLAGS) -shared -o $(PATH_LIB_OUT)/libprojectUtil.so $(PATH_LIB_OUT)/libprojectUtil/projectUtil.o
+# $(PATH_LIB_OUT)/lib%.so : $(PATH_LIB_OUT)/lib%/lib%.o
+# 	$(CC) $(LDFLAGS) -shared -o $@ $<
 
-
-
-
-#build the .o files
+#------------------------------------BUILD THE .o FILES-----------------------------------------------
+#server
 $(PATH_OUT)/server.o : $(PATH_SRC)/server.c
 	$(CC) $(CFLAGS) -c -o $@ $<
-
-
+#client
 $(PATH_OUT)/client.o : $(PATH_SRC)/client.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-
+#libmessage
 $(PATH_LIB_OUT)/libmessage/libmessage.o : $(PATH_SRC)/$(PATH_LIBS)/libmessage/message.c $(PATH_SRC)/$(PATH_LIBS)/libmessage/message.h
 	$(CC) $(CFLAGS) -fPIC -c -o $@ $<
 
-
-$(PATH_LIB_OUT)/libprojectUtil/projectUtil.o : $(PATH_SRC)/$(PATH_LIBS)/libprojectUtil/projectUtil.c $(PATH_SRC)/$(PATH_LIBS)/libprojectUtil/projectUtil.h
+#libprojectUtil
+$(PATH_LIB_OUT)/libprojectUtil/libprojectUtil.o : $(PATH_SRC)/$(PATH_LIBS)/libprojectUtil/projectUtil.c $(PATH_SRC)/$(PATH_LIBS)/libprojectUtil/projectUtil.h
 	$(CC) $(CFLAGS) -fPIC -c -o $@ $<
 
-$(PATH_GAME_OUT)/test_cli.o : $(PATH_GAME_SRC)/test_cli.c
-	$(CC) $(CFLAGS) -c -o $@ $<
-
-$(PATH_GAME_OUT)/test_serv.o : $(PATH_GAME_SRC)/test_serv.c
-	$(CC) $(CFLAGS) -c -o $@ $<
-
-$(PATH_GAME_OUT)/hangman_cli.o : $(PATH_GAME_SRC)/hangman_cli.c
-	$(CC) $(CFLAGS) -c -o $@ $<
-
-$(PATH_GAME_OUT)/hangman_serv.o : $(PATH_GAME_SRC)/hangman_serv.c
+#The games
+$(PATH_GAME_OUT)/%.o : $(PATH_GAME_SRC)/%.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 clean : 

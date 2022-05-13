@@ -1,0 +1,25 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/thomas/Documents/Cours_fac/PROJET/PROJETSYS'
+mkdir -p ./out/libs
+mkdir -p ./out/libs/libmessage
+mkdir -p ./out/libs/libprojectUtil
+mkdir -p ./out/game
+cp ./src/game/dictionnaire.txt ./out/game/dictionnaire.txt
+gcc -Wall -std=c99 -g -c -o out/server.o src/server.c
+gcc -Wall -std=c99 -g -fPIC -c -o out/libs/libmessage/libmessage.o src/libs/libmessage/message.c
+gcc -g -shared -o ./out/libs/libmessage.so ./out/libs/libmessage/libmessage.o
+gcc -Wall -std=c99 -g -fPIC -c -o out/libs/libprojectUtil/libprojectUtil.o src/libs/libprojectUtil/projectUtil.c
+gcc -g -shared -o ./out/libs/libprojectUtil.so ./out/libs/libprojectUtil/libprojectUtil.o
+gcc -g -L./out/libs -o server out/server.o -lmessage -lprojectUtil
+gcc -Wall -std=c99 -g -c -o out/client.o src/client.c
+gcc -g -L./out/libs -o client out/client.o -lmessage -lprojectUtil
+gcc -Wall -std=c99 -g -c -o out/game/test_serv.o src/game/test_serv.c
+gcc -g -L./out/libs -o out/game/test_serv out/game/test_serv.o -lmessage
+gcc -Wall -std=c99 -g -c -o out/game/test_cli.o src/game/test_cli.c
+gcc -g -L./out/libs -o out/game/test_cli out/game/test_cli.o -lmessage
+gcc -Wall -std=c99 -g -c -o out/game/hangman_serv.o src/game/hangman_serv.c
+gcc -g -L./out/libs -o out/game/hangman_serv out/game/hangman_serv.o -lmessage -lprojectUtil
+gcc -Wall -std=c99 -g -c -o out/game/hangman_cli.o src/game/hangman_cli.c
+gcc -g -L./out/libs -o out/game/hangman_cli out/game/hangman_cli.o -lmessage -lprojectUtil
+make: Leaving directory '/home/thomas/Documents/Cours_fac/PROJET/PROJETSYS'
+ 
