@@ -5,7 +5,7 @@
 
 #include "message.h"
 
-
+//Send the size of the string, followed by the string 
 int send_string(int fd, char *str){
     if(! str ) return 3;
     int len = strlen(str);
@@ -37,6 +37,7 @@ char recv_char(int fd){
     return letter;
 }
 
+//Get the size of the string, allocate the memory and read the string
 char *recv_string(int fd) {
     int len;
     char *str;
@@ -76,6 +77,7 @@ int recv_int(int fd) {
     return num;
 }
 
+//Send the number of arguments, followed by the arguments
 int send_argv(int fd, char *argv[]){
     int argc = 0;
     char **oldArgv = argv;
@@ -101,6 +103,7 @@ int send_argv(int fd, char *argv[]){
     return 0;
 }
 
+//Get the number of arguments, allocate the memory and read the arguments
 char **recv_argv(int fd) {
     int len;
     if (read(fd, &len, sizeof(int)) == -1) {

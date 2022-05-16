@@ -38,7 +38,6 @@ int isInt(char *str){
     return 1;
 }
 
-//count the number of lines in a file
 int countLines(char *path){
     int nbLines = 0;
     FILE *file = fopen(path, "r");
@@ -57,7 +56,6 @@ int countLines(char *path){
     return nbLines;
 }
 
-//Return the word with the numLine in the file
 char *getWordByNumLine(char *path, int numLine){
     FILE *file = fopen(path, "r");
     if(file == NULL){
@@ -81,7 +79,6 @@ char *getWordByNumLine(char *path, int numLine){
     return NULL;
 }
 
-//Get a random number between 1 and max, because sometimes RAND_MAX is not enough
 int getRandomNumber(int max){
     if(RAND_MAX > max){
         return rand() % max + 1;
@@ -94,7 +91,6 @@ int getRandomNumber(int max){
     }
 }
 
-// verify if a string contains spaces
 int containsSpaces(char *str){
     int i = 0;
     while(str[i] != '\0'){

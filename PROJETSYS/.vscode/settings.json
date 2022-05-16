@@ -8,6 +8,7 @@
         "projectutil.h": "c",
         "stdio.h": "c",
         "stdlib.h": "c",
-        "string": "c"
+        "string": "c",
+        "dirent.h": "c"
     }
 }
