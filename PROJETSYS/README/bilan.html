@@ -1,0 +1,195 @@
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>Présentation Projet</title>
+</head>
+
+<body>
+    <main>
+        <nav>
+            <ul>
+                <li> <a href="../README.html">Presentation of the project.</a></li>
+                <li><a href="comm.html">Communications Diagram</a></li>
+                <li id="currentPage"><a href="bilan.html">Conclusion/Bilan</a></li>
+                <li><a href="">Possible improvement</a></li>
+                <li><a href="">About our pair</a></li>
+            </ul>
+        </nav>
+        <div class="clear"></div>
+        <h1>Assessment and conclusion of the work carried out</h1>
+        <p>This project is the most complex we have had since the beginning of our course. It requires a base of
+            knowledge in C language, as well as in system programming. It took us about 30 hours of work. It required
+            time for reflection, and we had to go back. Repeating the course on compilation and on libraries was
+            mandatory, as well as the chapters on signals. We will now detail and explain the problems we encountered
+            and the solutions provided.
+        </p>
+        <section class="index">
+            <p><strong>Contents :</strong></p>
+            <ul>
+                <li><a href="bilan.html#libmessage">libmessage.so</a></li>
+                <li><a href="bilan.html#server">Server program</a></li>
+            </ul>
+        </section>
+        <h2 id="libmessage">libmessage.so</h2>
+        <p>In the subject, he asked us to make a dynamic library in which will be grouped the functions allowing
+            communication between two processes, through a file descriptor. This library will notably allow us to make
+            the processes communicate through a named pipe.
+            In this library we were given four functions to perform:
+        </p>
+        <p>
+            After a short reflection, we decided to add 4 simple functions allowing to send and receive, int and chars.
+            Indeed these functions will allow us to use them in communications, while taking care of errors.
+        </p>
+        <table>
+            <tr>
+                <td>
+                    <p><strong>send_string</strong> : We must first send the size of the string to read, then the string
+                        itself</p>
+                    <a href="images/send_string.png" target="_blank"><img src="images/send_string.png"
+                            alt="Illustration send_string" width="390" height="228"></a>
+                </td>
+                <td>
+                    <p><strong>send_int</strong> : We just send the int in the FD</p>
+                    <a href="images/send_int.png" target="_blank"><img src="images/send_int.png"
+                            alt="Illustration send_int" width="390" height="228"></a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p><strong>recv_string</strong> : Does the reverse, first reads the size of the string and reads the
+                        corresponding number of characters.</p>
+                    <a href="images/recv_string.png" target="_blank"><img src="images/recv_string.png"
+                            alt="Illustration recv_string" width="390" height="228"></a>
+                </td>
+                <td>
+                    <p><strong>recv_int</strong> : We just read the int in the FD</p>
+                    <a href="images/recv_int.png" target="_blank"><img src="images/recv_int.png"
+                            alt="Illustration recv_int" width="390" height="228"></a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p><strong>send_argv</strong> : Allows you to send an array of strings, by first sending the number
+                        strings then each string using send_string</p>
+                    <a href="images/send_argv.png" target="_blank"><img src="images/send_argv.png"
+                            alt="Illustration send_argv" width="390" height="228"></a>
+                </td>
+                <td>
+                    <p><strong>send_char</strong> : Just send the char in the FD.</p>
+                    <a href="images/send_char.png" target="_blank"><img src="images/send_char.png"
+                            alt="Illustration send_char" width="390" height="228"></a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p><strong>recv_argv</strong> : Does the reverse, first reads the number of strings and reads each
+                        string with recv_argv</p>
+                    <a href="images/recv_argv.png" target="_blank"><img src="images/recv_argv.png"
+                            alt="Illustration recv_argv" width="390" height="228"></a>
+                </td>
+                <td>
+                    <p><strong>recv_char</strong> : We just read the char in the FD</p>
+                    <a href="images/recv_char.png" target="_blank"><img src="images/recv_char.png"
+                            alt="Illustration recv_char" width="390" height="228"></a>
+                </td>
+            </tr>
+        </table>
+        <h2 id="server">Server Program</h2>
+        <p>We then made the generic server. We had to do various initializations such as verifying that the server is
+            not already running by testing the presence of the <strong>/tmp/game_server.pid</strong> file, creating it
+            if not and
+            creating the pipe through which the server and the generic client will communicate. We also create the
+            folder where the game files will be.</p>
+        <p>We then set up the structure that it is advisable to use in the subject, with an infinite loop, which waits
+            for the signal from sigUSR1 to wake up.</p>
+        <p>Finally, once these steps have been completed, we still have to manage the wake-up of the server by the
+            client. We choose to retrieve the name of the game in order to test its existence before continuing.
+            So we create a child process, which will overlap later with the game on the server side.
+            In the child, we retrieve information such as the arguments of the game and the pid of the client who woke
+            us up. We also need to create named pipes for communication between processes.</p>
+        <p>Once the pipes have been created, we tell the client that this step is done and we wake him up with the sending of sigUSR1.</p>
+
+        <p>We just have to do the dup() and run the game on the server side.</p>
+        <p><strong>This diagram summarizes the actions performed by the server:</strong></p>
+        <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+        <script>
+            mermaid.initialize({    "startOnLoad": true,
+                                    "sequence": {
+                                        "height": 40,
+                                        "actorMargin": 80,
+                                        "mirrorActors": false,
+                                        "bottomMarginAdj": 1
+                                    },  
+                                    "theme": "forest",
+                                    "themeCSS": ".node rect { fill: red; }" 
+                                });
+        </script>
+
+        <div class="mermaid activity_serv">
+            flowchart TB
+            A[Start] --> B{Server already launched?}
+            B -->|yes| C[Exit]
+            B -->|no| D[Put handlers]
+            D --> E[Create PID File]
+            E --> F[Write PID in File]
+            F --> G{FIFO already created ?}
+            G -->|yes| H{continue}
+            G -->|no| G1[Create PID File]
+            G1 --> H
+            H --> I{Game folder alreay created ?}
+            I -->|no| J[Create folder]
+            I -->|yes| K{continue}
+            J --> K{continue}
+            K --> L[Put USR1handler]
+            L --> M{continue}
+            M --> N{USR1 receive ?}
+            N -->|yes| O[Open the FIFO]
+            N -->|no| M
+            O --> P[Read Client PID]
+            P --> Q[Read Name of Game]
+            Q --> R[Make GamePath]
+            R --> S{Game exist and executable ?}
+            S -->|no| M
+            S -->|yes| T[Fork]
+            T --> U[Read arguments]
+            T --> M
+            subgraph child
+            U --> V[Add server PID to arguments]
+            V --> W[Make FIFOs]
+            W --> X[Send USR1 to client]
+            X --> Y[Duplicate fd]
+            Y --> Z[Exec game_serv]
+            end
+        </div>
+        <h2>Client program</h2>
+        <div class="mermaid activity_serv">
+            flowchart TB
+            A[start] --> B[Block SigUSR1]
+            B --> C[verify arguments]
+            C --> D{Game exist and is executable ?}
+            D -->|no| E[exit]
+            D -->|yes| F[Open and read pid of server]
+            F --> G[Set up Handler for USR1 & USR2]
+            G --> H[Wake up the server]
+            H --> I[Open the fifo]
+            I --> J[Send pid of client to server]
+            J --> K[Send name of game to server]
+            K --> L[Send arguments to server]
+            L --> M{continue}
+            M --> N{SIGUS1 received ?}
+            N -->|no| M
+            N -->|yes| O[Create Path of fifos]
+            O --> P[Open the fifos]
+            P --> Q[Duplicate the files descriptors]
+            Q --> R[Create gamePath]
+            R --> S[Exec game_cli]
+        </div>
+    </main>
+</body>
+
+</html>

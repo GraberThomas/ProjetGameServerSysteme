@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>Présentation Projet</title>
+</head>
+
+<body>
+    <main>
+        <nav>
+            <ul>
+                <li><a href="../README.html">Presentation of the project.</a></li>
+                <li id="currentPage"><a href="comm.html">Communications Diagram</a></li>
+                <li><a href="bilan.html">Conclusion/Bilan</a></li>
+                <li><a href="README.html#improvement">Possible improvement</a></li>
+                <li><a href="README.html#improvement">About our pair</a></li>
+            </ul>
+        </nav>
+        <div class="clear"></div>
+        <h1>THE COMMUNICATION BETWEEN HANGMAN_SERV & HANGMAN_CLI</h1>
+        <p>It is obvious that once the client and server programs of the game in question are launched, it is necessary
+            to establish a strict communication protocol. Indeed, the programs must continuously wait for the response
+            of the other.
+            For the implementation of this communication, we chose that the game client would manage almost no chain. It
+            will receive all the strings it displays on the terminal from the server.
+        </p>
+        <p>
+            For communication, we used the shared library libmessage.so, to which we added a send_char function in order
+            to have the functions necessary for communication.
+        </p>
+        <h2>hangman_serv/hangman_cli communication sequence diagram</h2>
+        <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+        <script>
+            mermaid.initialize({    "startOnLoad": true,
+                                    "sequence": {
+                                        "height": 40,
+                                        "actorMargin": 80,
+                                        "mirrorActors": false,
+                                        "bottomMarginAdj": 1
+                                    },  
+                                    "theme": "forest",
+                                    "themeCSS": ".node rect { fill: red; }" 
+                                });
+        </script>
+
+        <div class="mermaid">
+            sequenceDiagram
+                participant S as hangman_serv
+                participant C as hangman_client
+                S ->> C : PID : int
+                alt Arguments is valid
+                    S ->> C : 0 : int
+                else
+                    S ->> C : 1 : int
+                    par
+                        S ->> S : Exit
+                    and
+                        C ->> C : Exit
+                    end
+                end
+                S ->> C : "Welcome, you have to guess a word :" : String 
+                alt Number max of error is set
+                    S ->> C : "You are allowed NB errors" : String
+                else
+                    S ->> C : "There is no limit number of errors" : String
+                end
+                S ->> C : "With each request, you have NB seconds to answer" : String
+                S ->> C : "Begin of the game. Good luck !" : String
+                loop The player loose or win
+                    S ->> C : "Word to find : [Hidden word]" : String
+                    loop Char input is valid
+                        C ->> S : input of player : Char
+                        alt Char input is valid
+                            S ->> C : 1 : int
+                        else
+                            S ->> C : 0 : int
+                        end
+                    end
+                    alt The letter is in the word
+                        S ->> C : "Good choice, you are still entlited to NB errors" : String
+                    else
+                        S ->> C : "Error, you are still entlited to NB errors" : String
+                    end
+                    alt Player won or player loose
+                        S ->> C : 0 : int
+                        
+                    else
+                        S ->> C : 1 : int
+                    end
+                end
+                alt Player won
+                    S ->> C : 1 : int
+                    S ->> C : "You won, you found the word [WORD], you have [NB] errors" : String
+                    S ->> C : "Do you want save your result ? [Y/n]" : String
+                    C ->> S : player input : Char
+                    alt Player want save result
+                        S ->> C : "You have chosen to save your result,\nyou must choose a pseudo with no space and minimum length 4\n\n" : String
+                        loop Pseudo is not valid
+                            S ->> C : "Enter your pseudo : " : String
+                            C ->> S : player input : String
+                            alt Pseudo is valid
+                                S ->> C : SendInt : 0
+                            else Pseudo is not valid
+                                S ->> C : SendInt : 1
+                                S ->> C : "Error : the pseudo is too short, too long, or it contains space(s)" : String
+                            end
+                        end
+                        alt Save succes
+                            S ->> C : "Bye, save the result was successful" : String
+                        else Save failed
+                            S ->> C : "Bye, save the result failed" : String
+                        end
+                        par
+                            S ->> S : Exit
+                        and
+                            C ->> C : Exit
+                        end
+                    else Player dont want save result
+                        par
+                            C ->> C : Exit
+                        and
+                            S ->> S : Exit
+                        end
+                    end
+                else Player loose
+                    S ->> C : SendInt : 0
+                    S ->> C : "You loose, the secret word was [WORD]."
+                    par
+                        C ->> C : Exit
+                    and
+                        S ->> S : Exit
+                    end
+                end
+    </main>
+</body>
+
+</html>

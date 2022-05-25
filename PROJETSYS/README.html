@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="README/styles/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>Présentation Projet</title>
+</head>
+
+<body>
+    <main>
+        <nav>
+            <ul>
+                <li id="currentPage"> <a href="README.html#presentation">Presentation of the project.</a></li>
+                <li><a href="README/comm.html">Communications Diagram</a></li>
+                <li><a href="README/bilan.html">Conclusion/Bilan</a></li>
+                <li><a href="README.html#improvement">Possible improvement</a></li>
+                <li><a href="README.html#improvement">About our pair</a></li>
+            </ul>
+        </nav>
+        <div class="clear"></div>
+        <h1>PROJECT SUBJECT</h1>
+        <p>
+            The goal of this project is to create a generic game server allowing
+            play interactive games in console mode (tetris, battleship, maze,
+            power 4, etc.). The player interacts with a client program that interacts
+            with a server program. Both of these programs can run on a
+            remote machine if you use ssh to connect to it.
+            Several parts can take place simultaneously.
+        </p>
+        <img class="presentation" id="comm_illustrations" src="README/images/shema_jeu.png" alt="communications illustration.">
+        <p>So there is to develop a generic game server and a generic client. The client allows you to choose a set of
+            arguments at launch, and the whole difficulty of the project lies in the communication between the programs,
+            and therefore between the processes.</p>
+        <p>The client program receives via the command line the name of the game to which
+            the player wishes to play and possibly additional arguments ([args]...)
+            to pass to the main() function of the &lt;game&gt;_serv program.
+        </p>
+        <img class="presentation" src="README/images/exemple_client.png" alt="exemple client">
+        <img class="presentation" src="README/images/exemple_server.png" alt="exemple server">
+        <p>
+            After verifying the existence of the program &lt;game&gt;_cli, the customer program sends to the Server
+            program:
+        </p>
+        <ul>
+            <li>his Pid</li>
+            <li>The name of the game desired&lt;game&gt;and any arguments [args] ...</li>
+        </ul>
+        <p>
+            When it receives this data, the server program, after checking the existence
+            of the &lt;game&gt;_serv program, creates a new process which is then loaded
+            communication with the client program using 2 other tubes
+            named /tmp/game_server/cli&lt;pid&gt;_0.fifo and /tmp/game_server/cli&lt;pid&gt;_1.fifo
+            where &lt;pid&gt; is the PID of the process running the client program.
+        </p>
+        <p>
+            These 2 named tubes must be created on the server side because the customer program
+            Maybe interrupted at any time by the player.Likewise, they will be deleted
+            server side at the end of the game.
+        </p>
+        <p>
+            Side server, the standard input of the child process is redirected to one of the
+            extremities of the tube named /tmp/game_server/cli&lt;pid&gt;_0.fifo; likewise,
+            the standard output of the child process is redirected to one of the ends of the
+            named tube /tmp/game_server/cli&lt;pid&gt;_1.fifo. Then the child process
+            overlaps to run the &lt;game&gt;_serv program.
+        </p>
+        <p>
+            Customer side, after opening the other two ends of the named tubes
+            /tmp/game_server/cli&lt;pid&gt;_0.fifo and /tmp/game_server/cli&lt;pid&gt;_1.fifo,
+            the process overlaps to run the &lt;game&gt;_cli program.
+        </p>
+        <h2>Communication between &lt;game&gt;_serv and &lt;game&gt;_cli</h2>
+        <p>This following image show the communication between the 2 game programs after the exec :</p>
+        <img class="presentation" src="README/images/shema_comm.png" alt="Shema comm_illustrations">
+        <h2>Use of SIGUSR1 and SIGUSR2 signals</h2>
+        <ul>
+            <li>In the client to server direction: the client sends SIGUSR1 to the server to
+                wake him up and tell him that he will open the pipe named /tmp/game_server.fifo
+                and send it some data (its PID, the name of the desired game &lt;game&gt; and
+                any arguments [args]...)</li>
+            <li>
+                In the server to client direction:
+                <ul>
+                    <li>The server sends SIGUSR1 to the client to indicate that the 2 pipes
+                        named /tmp/game_server/cli&lt;pid&gt;_&lt;x&gt;.fifo have been created;
+                        the customer will be able to open them and cover himself; the party will be able to
+                        unroll
+                    </li>
+                    <li>
+                        The server sends SIGUSR2 to the client to indicate that an error
+                        occurred (program &lt;game&gt;_serv does not exist, system error,
+                        etc.). In this case, the client program must terminate.
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <h2>hangman_serv & hangman_cli</h2>
+        <p>
+            Hangman is a game of finding a word by guessing what are the
+            letters that compose it. The word to guess is chosen randomly by the program
+            hangman_serv in the supplied dictionary.txt file. At the start of the game, the word
+            to find is displayed by replacing each letter with a dash (the number of dashes
+            displayed is therefore equal to the length of the word). Then, on each game turn, the
+            player proposes a letter. If the letter is part of the word, it is written in its place as many times as it
+            is in the word. Otherwise, the number of errors
+            of the player is incremented. If this number of errors exceeds the number of errors
+            allowed set at the start of the game, then the player has lost. In other words, the player
+            wins if he manages to guess the word with a lower or equal number of errors
+            the number of errors allowed.</p>
+    </main>
+</body>
+
+</html>

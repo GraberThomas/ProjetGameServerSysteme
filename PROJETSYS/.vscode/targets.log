@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri May 13 10:53:49 2022
+# Make data base, printed on Wed May 25 14:47:25 2022
 
 # Variables
 
@@ -16,30 +16,18 @@ GDK_BACKEND = x11
 LC_ALL = C
 # environment
 NO_AT_BRIDGE = 1
+# environment
+GTK_RC_FILES = /etc/gtk/gtkrc:/home/thomas/.gtkrc:/home/thomas/.config/gtkrc
 # makefile (from 'Makefile', line 6)
 PATH_GAME_SRC = ${PATH_SRC}/game
 # environment
-GJS_DEBUG_OUTPUT = stderr
-# environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-0cabd22f-8c0d-4cda-bf04-5bba1a74bfb7.sock
-# environment
-LC_NAME = fr_FR.UTF-8
-# environment
-LC_NUMERIC = fr_FR.UTF-8
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-4e301899-cf5e-4f72-b0fb-8b863a7f604b.sock
 # environment
 VSCODE_CWD = /home/thomas
-# environment
-WINDOWPATH = 2
-# environment
-LC_ADDRESS = fr_FR.UTF-8
 # makefile (from 'Makefile', line 3)
 PATH_LIB_OUT = ${PATH_OUT}/${PATH_LIBS}
-# environment
-GDM_LANG = fr_FR.UTF-8
 # default
 MAKE_COMMAND := make
-# environment
-GTK3_MODULES = xapp-gtk3-module
 # makefile (from 'Makefile', line 1)
 PATH_OUT = ./out
 # automatic
@@ -55,7 +43,7 @@ PWD = /home/thomas/Documents/Cours_fac/PROJET/PROJETSYS
 # environment
 MAIL = /var/spool/mail/thomas
 # environment
-XDG_DATA_DIRS = /usr/local/share/:/usr/share/:/var/lib/snapd/desktop
+OLDPWD = /home/thomas
 # automatic
 ^D = $(patsubst %/,%,$(dir $^))
 # environment
@@ -63,11 +51,13 @@ VSCODE_LOG_STACK = false
 # automatic
 %F = $(notdir $%)
 # environment
-VSCODE_CODE_CACHE_PATH = /home/thomas/.config/Code/CachedData/da15b6fd3ef856477bf6f4fb29ba1b7af717770d
+VSCODE_CODE_CACHE_PATH = /home/thomas/.config/Code/CachedData/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5
+# environment
+XDG_SESSION_PATH = /org/freedesktop/DisplayManager/Session1
 # environment
 LANG = C
 # environment
-XAUTHORITY = /run/user/1000/gdm/Xauthority
+XAUTHORITY = /home/thomas/.Xauthority
 # default
 .LOADED := 
 # default
@@ -85,15 +75,19 @@ APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
 # automatic
 *D = $(patsubst %/,%,$(dir $*))
 # environment
-MFLAGS = -pqrR
+PAM_KWALLET5_LOGIN = /run/user/1000/kwallet5.socket
 # environment
-SSH_AUTH_SOCK = /run/user/1000/keyring/ssh
+MFLAGS = -pqrR
 # default
 .SHELLFLAGS := -c
+# environment
+XDG_CONFIG_DIRS = /home/thomas/.config/kdedefaults:/etc/xdg
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
 # environment
-XDG_SESSION_DESKTOP = gnome-xorg
+XCURSOR_THEME = breeze_cursors
+# environment
+XDG_SESSION_DESKTOP = KDE
 # makefile (from 'Makefile', line 1)
 MAKEFILE_LIST := Makefile
 # automatic
@@ -101,19 +95,15 @@ MAKEFILE_LIST := Makefile
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 14288
-# environment
-MOZ_ENABLE_WAYLAND = 1
+VSCODE_PID = 28541
 # environment
 XDG_SESSION_TYPE = x11
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
 # environment
-SESSION_MANAGER = local/rogstrixg15:@/tmp/.ICE-unix/1641,unix/rogstrixg15:/tmp/.ICE-unix/1641
+SESSION_MANAGER = local/arch:@/tmp/.ICE-unix/1041,unix/arch:/tmp/.ICE-unix/1041
 # automatic
 *F = $(notdir $*)
-# environment
-QT_QPA_PLATFORMTHEME = qt5ct
 # environment
 CHROME_DESKTOP = code-url-handler.desktop
 # environment
@@ -121,17 +111,13 @@ DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus
 # automatic
 <D = $(patsubst %/,%,$(dir $<))
 # environment
-VSCODE_NLS_CONFIG = {"locale":"fr","availableLanguages":{"*":"fr"},"_languagePackId":"25fe6a3290ec415596628d4afc87a88c.fr","_translationsConfigFile":"/home/thomas/.config/Code/clp/25fe6a3290ec415596628d4afc87a88c.fr/tcf.json","_cacheRoot":"/home/thomas/.config/Code/clp/25fe6a3290ec415596628d4afc87a88c.fr","_resolvedLanguagePackCoreLocation":"/home/thomas/.config/Code/clp/25fe6a3290ec415596628d4afc87a88c.fr/da15b6fd3ef856477bf6f4fb29ba1b7af717770d","_corruptedFile":"/home/thomas/.config/Code/clp/25fe6a3290ec415596628d4afc87a88c.fr/corrupted.info","_languagePackSupport":true}
+VSCODE_NLS_CONFIG = {"locale":"fr","availableLanguages":{"*":"fr"},"_languagePackId":"25fe6a3290ec415596628d4afc87a88c.fr","_translationsConfigFile":"/home/thomas/.config/Code/clp/25fe6a3290ec415596628d4afc87a88c.fr/tcf.json","_cacheRoot":"/home/thomas/.config/Code/clp/25fe6a3290ec415596628d4afc87a88c.fr","_resolvedLanguagePackCoreLocation":"/home/thomas/.config/Code/clp/25fe6a3290ec415596628d4afc87a88c.fr/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5","_corruptedFile":"/home/thomas/.config/Code/clp/25fe6a3290ec415596628d4afc87a88c.fr/corrupted.info","_languagePackSupport":true}
 # default
 MAKE_HOST := x86_64-pc-linux-gnu
 # makefile
 SHELL = /bin/sh
 # default
 MAKECMDGOALS := all
-# environment
-XMODIFIERS = @im=ibus
-# environment
-GJS_DEBUG_TOPICS = JS ERROR;JS LOG
 # environment
 SHLVL = 1
 # makefile (from 'Makefile', line 2)
@@ -141,83 +127,77 @@ MAKELEVEL := 0
 # default
 MAKE = $(MAKE_COMMAND)
 # environment
-PATH = /home/thomas/.local/bin:/usr/local/bin:/usr/bin:/var/lib/snapd/snap/bin:/usr/local/sbin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl
+PATH = /usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl
 # default
 MAKEFILES := 
 # environment
-LC_MONETARY = fr_FR.UTF-8
+LANGUAGE = 
 # environment
 MOTD_SHOWN = pam
 # automatic
 ^F = $(notdir $^)
 # environment
-LC_TIME = fr_FR.UTF-8
-# environment
-INVOCATION_ID = 8bf20ad8a94b4a36ae6e696c5e5318e5
-# environment
 VSCODE_LOG_NATIVE = false
-# environment
-USERNAME = thomas
-# environment
-LC_TELEPHONE = fr_FR.UTF-8
 # automatic
 ?F = $(notdir $?)
 # environment
-XDG_CURRENT_DESKTOP = GNOME
+KDE_APPLICATIONS_AS_SCOPE = 1
+# environment
+XDG_SEAT = seat0
+# environment
+XDG_CURRENT_DESKTOP = KDE
 # automatic
 +F = $(notdir $+)
 # environment
-DESKTOP_SESSION = gnome-xorg
+XDG_SEAT_PATH = /org/freedesktop/DisplayManager/Seat0
 # environment
-ORIGINAL_XDG_CURRENT_DESKTOP = GNOME
+DESKTOP_SESSION = plasma
+# environment
+ORIGINAL_XDG_CURRENT_DESKTOP = KDE
 # 'override' directive
 GNUMAKEFLAGS := 
 # environment
 LOGNAME = thomas
 # environment
-GIO_LAUNCHED_DESKTOP_FILE = /usr/share/applications/visual-studio-code.desktop
+XDG_VTNR = 1
 # makefile
 .DEFAULT_GOAL := all
 # environment
-SYSTEMD_EXEC_PID = 1657
-# environment
-EDITOR = /usr/bin/nano
+SYSTEMD_EXEC_PID = 923
 # environment
 DISPLAY = :0
+# environment
+GTK_MODULES = canberra-gtk-module
 # environment
 USER = thomas
 # default
 MAKE_VERSION := 4.3
+# environment
+KDE_SESSION_UID = 1000
 # makefile (from 'Makefile', line 9)
 LDFLAGS = -g
 # environment
-MANAGERPID = 1514
-# environment
-LC_MEASUREMENT = fr_FR.UTF-8
-# environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 14263
-# environment
 _ = /usr/bin/make
-# environment
-LC_PAPER = fr_FR.UTF-8
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # makefile (from 'Makefile', line 8)
 CFLAGS = -Wall -std=c99 -g
 # environment
-JOURNAL_STREAM = 8:4775
-# environment
 XDG_SESSION_CLASS = user
 # environment
 VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
 # environment
-HOME = /home/thomas
+GTK2_RC_FILES = /etc/gtk-2.0/gtkrc:/home/thomas/.gtkrc-2.0:/home/thomas/.config/gtkrc-2.0
 # environment
-QT_IM_MODULE = ibus
+HOME = /home/thomas
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # environment
-VSCODE_IPC_HOOK = /run/user/1000/vscode-6002357e-1.67.1-main.sock
+VSCODE_IPC_HOOK = /run/user/1000/vscode-6002357e-1.67.2-main.sock
+# environment
+XDG_SESSION_ID = 2
+# environment
+XCURSOR_SIZE = 24
 # default
 .RECIPEPREFIX := 
 # automatic
@@ -225,11 +205,13 @@ VSCODE_IPC_HOOK = /run/user/1000/vscode-6002357e-1.67.1-main.sock
 # default
 SUFFIXES := 
 # environment
-QT_AUTO_SCREEN_SCALE_FACTOR = 1
+QT_AUTO_SCREEN_SCALE_FACTOR = 0
 # environment
 VSCODE_CLI = 1
 # environment
 ELECTRON_NO_ATTACH_CONSOLE = 1
+# environment
+KDE_SESSION_VERSION = 5
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync check-symlink guile load
 # makefile (from 'Makefile', line 5)
@@ -237,13 +219,9 @@ PATH_GAME_OUT = ${PATH_OUT}/game
 # makefile (from 'Makefile', line 7)
 CC = gcc
 # environment
-XDG_MENU_PREFIX = gnome-
-# environment
-GDMSESSION = gnome-xorg
-# environment
-LC_IDENTIFICATION = fr_FR.UTF-8
+KDE_FULL_SESSION = true
 # variable set hash-table stats:
-# Load=116/1024=11%, Rehash=0, Collisions=25/253=10%
+# Load=105/1024=10%, Rehash=0, Collisions=3/242=1%
 
 # Pattern-specific Variable Values
 
@@ -251,10 +229,10 @@ LC_IDENTIFICATION = fr_FR.UTF-8
 
 # Directories
 
-# . (device 66312, inode 810564): 6 files, no impossibilities.
-# src/game (device 66312, inode 810860): No files, no impossibilities so far.
+# . (device 66311, inode 3539388): 7 files, no impossibilities.
+# src/game (device 66311, inode 3539484): No files, no impossibilities so far.
 
-# 6 files, no impossibilities in 2 directories.
+# 7 files, no impossibilities in 2 directories.
 
 # Implicit Rules
 
@@ -286,7 +264,6 @@ client: out/client.o out/libs/libmessage.so out/libs/libprojectUtil.so
 	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $< -lmessage -lprojectUtil
 
 # Not a target:
- 
 src/libs/libmessage/message.h:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
@@ -308,7 +285,8 @@ out/game/test_serv.o:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-13 10:53:35.752040639
+ 
+#  Last modified 2022-05-14 20:24:01.58733573
 #  File has been updated.
 #  Successfully updated.
 
@@ -492,12 +470,12 @@ src/libs/libprojectUtil/projectUtil.h:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 39 / storage = 644 B / avg = 16 B
-# current buf: size = 8162 B / used = 644 B / count = 39 / avg = 16 B
+# strcache buffers: 1 (0) / strings = 40 / storage = 659 B / avg = 16 B
+# current buf: size = 8162 B / used = 659 B / count = 40 / avg = 16 B
 
-# strcache performance: lookups = 82 / hit rate = 52%
+# strcache performance: lookups = 83 / hit rate = 51%
 # hash-table stats:
-# Load=39/8192=0%, Rehash=0, Collisions=0/82=0%
-# Finished Make data base on Fri May 13 10:53:49 2022
+# Load=40/8192=0%, Rehash=0, Collisions=0/83=0%
+# Finished Make data base on Wed May 25 14:47:25 2022
 
  

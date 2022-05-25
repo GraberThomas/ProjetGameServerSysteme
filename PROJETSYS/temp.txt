@@ -1,0 +1,9 @@
+Nous avons ensuite fait le serveur générique. Il était nécessaire de faire les différentes initialisations telles que vérifiées que le serveur n'est pas déjà en exécution en testant la présence du fichier /tmp/game_server.pid, Crest sinon et créez le tube par lequel leLe serveur et le client générique communiquera.
+
+
+PROBLEMES RENCONTRES :
+    Connaitre le pid du jeu_cli dans jeu_serv et inversement
+    Buffer : Dans client, vider le buffer de stdin est nécessaire 
+    FIfos: Soucis de mis en place, erreur "aucun ecrivain"
+    Mettre en pause le client. 
+    Bien utiliser valgrind avec les recouvrements.
