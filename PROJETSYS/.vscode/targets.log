@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Wed May 25 14:47:25 2022
+# Make data base, printed on Thu May 26 15:55:53 2022
 
 # Variables
 
@@ -21,7 +21,7 @@ GTK_RC_FILES = /etc/gtk/gtkrc:/home/thomas/.gtkrc:/home/thomas/.config/gtkrc
 # makefile (from 'Makefile', line 6)
 PATH_GAME_SRC = ${PATH_SRC}/game
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-4e301899-cf5e-4f72-b0fb-8b863a7f604b.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-cf0376d8-ee73-45c1-a844-0bbe1762e6db.sock
 # environment
 VSCODE_CWD = /home/thomas
 # makefile (from 'Makefile', line 3)
@@ -95,13 +95,13 @@ MAKEFILE_LIST := Makefile
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 28541
+VSCODE_PID = 1264
 # environment
 XDG_SESSION_TYPE = x11
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
 # environment
-SESSION_MANAGER = local/arch:@/tmp/.ICE-unix/1041,unix/arch:/tmp/.ICE-unix/1041
+SESSION_MANAGER = local/arch:@/tmp/.ICE-unix/989,unix/arch:/tmp/.ICE-unix/989
 # automatic
 *F = $(notdir $*)
 # environment
@@ -163,7 +163,7 @@ XDG_VTNR = 1
 # makefile
 .DEFAULT_GOAL := all
 # environment
-SYSTEMD_EXEC_PID = 923
+SYSTEMD_EXEC_PID = 872
 # environment
 DISPLAY = :0
 # environment
@@ -229,10 +229,10 @@ KDE_FULL_SESSION = true
 
 # Directories
 
-# . (device 66311, inode 3539388): 7 files, no impossibilities.
+# . (device 66311, inode 3539388): 8 files, no impossibilities.
 # src/game (device 66311, inode 3539484): No files, no impossibilities so far.
 
-# 7 files, no impossibilities in 2 directories.
+# 8 files, no impossibilities in 2 directories.
 
 # Implicit Rules
 
@@ -285,7 +285,6 @@ out/game/test_serv.o:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
- 
 #  Last modified 2022-05-14 20:24:01.58733573
 #  File has been updated.
 #  Successfully updated.
@@ -294,6 +293,7 @@ out/game/hangman_serv: out/game/hangman_serv.o out/libs/libmessage.so out/libs/l
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
+ 
 #  recipe to execute (from 'Makefile', line 41):
 	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $< -lmessage -lprojectUtil
 
@@ -470,12 +470,12 @@ src/libs/libprojectUtil/projectUtil.h:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 40 / storage = 659 B / avg = 16 B
-# current buf: size = 8162 B / used = 659 B / count = 40 / avg = 16 B
+# strcache buffers: 1 (0) / strings = 41 / storage = 668 B / avg = 16 B
+# current buf: size = 8162 B / used = 668 B / count = 41 / avg = 16 B
 
-# strcache performance: lookups = 83 / hit rate = 51%
+# strcache performance: lookups = 84 / hit rate = 51%
 # hash-table stats:
-# Load=40/8192=0%, Rehash=0, Collisions=0/83=0%
-# Finished Make data base on Wed May 25 14:47:25 2022
+# Load=41/8192=1%, Rehash=0, Collisions=0/84=0%
+# Finished Make data base on Thu May 26 15:55:53 2022
 
  

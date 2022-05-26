@@ -1,3 +1,4 @@
+
 #define _DEFAULT_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
@@ -293,6 +294,21 @@ int main(int argc, char **argv){
     saINT.sa_handler = handler_sigint;
     sigemptyset(&saINT.sa_mask);
     saINT.sa_flags = 0;
+    if(sigaction(SIGINT, &saINT, NULL) == -1) {
+        fprintf(stderr, "%d : Error : sigaction\n", getpid());
+        perror("sigaction");
+        exit(27);
+    }
+    if(sigaction(SIGTERM, &saINT, NULL) == -1) {
+        fprintf(stderr, "%d : Error : sigaction\n", getpid());
+        perror("sigaction");
+        exit(27);
+    }
+    if(sigaction(SIGQUIT, &saINT, NULL) == -1) {
+        fprintf(stderr, "%d : Error : sigaction\n", getpid());
+        perror("sigaction");
+        exit(27);
+    }
     if(sigaction(SIGINT, &saINT, NULL) == -1) {
         fprintf(stderr, "%d : Error : sigaction\n", getpid());
         perror("sigaction");

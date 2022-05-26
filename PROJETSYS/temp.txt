@@ -7,3 +7,6 @@ PROBLEMES RENCONTRES :
     FIfos: Soucis de mis en place, erreur "aucun ecrivain"
     Mettre en pause le client. 
     Bien utiliser valgrind avec les recouvrements.
+
+
+For the generic customer, we have duborded to verify the validity of arguments.Then test if the game exists and is executable.We recover the PID that the server wrote in the /tmp/game_server.pid file.We must then set up the handlers of the Sigusr1 & Sigusr2 signals.

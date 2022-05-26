@@ -15,7 +15,7 @@
 char *itoa(int i);
 
 /**
- * @brief Get the path to the fifo file, when the number id
+ * @brief Get the path to the fifo file, whith the number id
  * 
  * @param pid The pid of the client, who is in the name of the fifo file
  * @param id 0 or 1, the number of the fifo file

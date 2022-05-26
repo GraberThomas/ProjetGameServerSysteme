@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html>
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -5,20 +7,40 @@
     <link rel="stylesheet" href="styles/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Roboto:wght@300;400;700&display=swap"
+        rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <title>Présentation Projet</title>
 </head>
 
 <body>
     <main>
-        <nav>
-            <ul>
+        <nav id="nav">
+            <ul class="large">
                 <li> <a href="../README.html">Presentation of the project.</a></li>
                 <li><a href="comm.html">Communications Diagram</a></li>
                 <li id="currentPage"><a href="bilan.html">Conclusion/Bilan</a></li>
                 <li><a href="">Possible improvement</a></li>
                 <li><a href="">About our pair</a></li>
             </ul>
+            <div id="hamburger">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <div id="submenu">
+                <ul>
+                    <li> <a href="../README.html">Presentation of the project.</a></li>
+                    <li><a href="comm.html">Communications Diagram</a></li>
+                    <li id="currentPage"><a href="bilan.html">Conclusion/Bilan</a></li>
+                    <li><a href="">Possible improvement</a></li>
+                    <li><a href="">About our pair</a></li>
+                </ul>
+            </div>
+            <a id="return_begin" href="bilan.html"><span>Return begin</span></a>
         </nav>
         <div class="clear"></div>
         <h1>Assessment and conclusion of the work carried out</h1>
@@ -28,11 +50,19 @@
             mandatory, as well as the chapters on signals. We will now detail and explain the problems we encountered
             and the solutions provided.
         </p>
+        <p><strong>The summary shows chronologically the steps that were necessary to complete the project.</strong></p>
         <section class="index">
             <p><strong>Contents :</strong></p>
             <ul>
                 <li><a href="bilan.html#libmessage">libmessage.so</a></li>
+                <li><a href="bilan.html#libprojectUtil.so">libprojectUtil.so</a></li>
+                <li><a href="bilan.html#makefile">Makefile</a></li>
                 <li><a href="bilan.html#server">Server program</a></li>
+                <li><a href="bilan.html#client">Client program</a></li>
+                <li><a href="bilan.html#hangman">Hangman</a></li>
+                <li><a href="bilan.html#end_process">End of process management</a></li>
+                <li><a href="bilan.html#tree">Improved makefile and tree structure of the project.</a></li>
+                <li><a href="bilan.html#conclusion">Conclusion</a></li>
             </ul>
         </section>
         <h2 id="libmessage">libmessage.so</h2>
@@ -50,55 +80,176 @@
                 <td>
                     <p><strong>send_string</strong> : We must first send the size of the string to read, then the string
                         itself</p>
-                    <a href="images/send_string.png" target="_blank"><img src="images/send_string.png"
-                            alt="Illustration send_string" width="390" height="228"></a>
+                    <figure>
+                        <a href="images/send_string.png" target="_blank"><img src="images/send_string.png"
+                                alt="Illustration send_string"  ></a>
+                        <figcaption>illustration send_string</figcaption>
+                    </figure>
                 </td>
                 <td>
                     <p><strong>send_int</strong> : We just send the int in the FD</p>
+                    <figure>
                     <a href="images/send_int.png" target="_blank"><img src="images/send_int.png"
-                            alt="Illustration send_int" width="390" height="228"></a>
+                            alt="Illustration send_int"  ></a>
+                        <figcaption>illustration send_int</figcaption>
+                    </figure>
                 </td>
             </tr>
             <tr>
                 <td>
                     <p><strong>recv_string</strong> : Does the reverse, first reads the size of the string and reads the
                         corresponding number of characters.</p>
-                    <a href="images/recv_string.png" target="_blank"><img src="images/recv_string.png"
-                            alt="Illustration recv_string" width="390" height="228"></a>
+                        <figure>
+                            <a href="images/recv_string.png" target="_blank"><img src="images/recv_string.png"
+                                alt="Illustration recv_string"  ></a>
+                            <figcaption>illustration recv_string</figcaption>
+                        </figure>
                 </td>
                 <td>
                     <p><strong>recv_int</strong> : We just read the int in the FD</p>
-                    <a href="images/recv_int.png" target="_blank"><img src="images/recv_int.png"
-                            alt="Illustration recv_int" width="390" height="228"></a>
+                    <figure>
+                        <a href="images/recv_int.png" target="_blank"><img src="images/recv_int.png"
+                            alt="Illustration recv_int"  ></a>
+                        <figcaption>illustration recv_int</figcaption>
+                    </figure>
                 </td>
             </tr>
             <tr>
                 <td>
                     <p><strong>send_argv</strong> : Allows you to send an array of strings, by first sending the number
                         strings then each string using send_string</p>
-                    <a href="images/send_argv.png" target="_blank"><img src="images/send_argv.png"
-                            alt="Illustration send_argv" width="390" height="228"></a>
+                        <figure>
+                            <a href="images/send_argv.png" target="_blank"><img src="images/send_argv.png"
+                                alt="Illustration send_argv"  ></a>
+                            <figcaption>illustration send_argv</figcaption>
+                        </figure>
                 </td>
                 <td>
                     <p><strong>send_char</strong> : Just send the char in the FD.</p>
-                    <a href="images/send_char.png" target="_blank"><img src="images/send_char.png"
-                            alt="Illustration send_char" width="390" height="228"></a>
+                    <figure>
+                        <a href="images/send_char.png" target="_blank"><img src="images/send_char.png"
+                            alt="Illustration send_char"  ></a>
+                        <figcaption>illustration send_char</figcaption>
+                    </figure>
                 </td>
             </tr>
             <tr>
                 <td>
                     <p><strong>recv_argv</strong> : Does the reverse, first reads the number of strings and reads each
                         string with recv_argv</p>
-                    <a href="images/recv_argv.png" target="_blank"><img src="images/recv_argv.png"
-                            alt="Illustration recv_argv" width="390" height="228"></a>
+                    <figure>
+                        <a href="images/recv_argv.png" target="_blank"><img src="images/recv_argv.png"
+                            alt="Illustration recv_argv"  ></a>
+                        <figcaption>illustration recv_argv</figcaption>
+                    </figure>
                 </td>
                 <td>
                     <p><strong>recv_char</strong> : We just read the char in the FD</p>
-                    <a href="images/recv_char.png" target="_blank"><img src="images/recv_char.png"
-                            alt="Illustration recv_char" width="390" height="228"></a>
+                    <figure>
+                        <a href="images/recv_char.png" target="_blank"><img src="images/recv_char.png"
+                            alt="Illustration recv_char"  ></a>
+                        <figcaption>illustration recv_char</figcaption>
+                    </figure>
                 </td>
             </tr>
         </table>
+        <div class="difficulty">
+            <p>We have not really encountered a difficulty on <strong>libmessage.so</strong><br> The difficulty we
+                encountered lies in the compilation and execution of the programs that use the library. We had to reread
+                the course to remedy it.</p>
+        </div>
+        <h2 id="libprojectUtil.so">libprojectUtil.so</h2>
+        <p>Throughout the development, we quickly realized that certain functions will be present in several programs. This is the reason why we decided to make a second library for our project.</p>
+        <p>
+            For example, we made a function to convert an int into its string, functions to generate paths, to count the lines of a file, etc.
+        </p>
+        <table>
+            <tr>
+                <td>
+                    <p><strong>itoa</strong> : Convert a integer to a string.</p>
+                    <figure>
+                        <a href="images/itoa.png" target="_blank"><img src="images/itoa.png"
+                                alt="Illustration itoa"  ></a>
+                        <figcaption>illustration itoa</figcaption>
+                    </figure>
+                </td>
+                <td>
+                    <p><strong>getPathFIFO</strong> : Get the path to the fifo file, whith the number id</p>
+                    <figure>
+                    <a href="images/getFifos.png" target="_blank"><img src="images/getFifos.png"
+                            alt="Illustration getPathFIFO"  ></a>
+                        <figcaption>illustration getPathFIFO</figcaption>
+                    </figure>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p><strong>isInt</strong> : verify if the string is a positive integer.</p>
+                        <figure>
+                            <a href="images/isInt.png" target="_blank"><img src="images/isInt.png"
+                                alt="Illustration recv_string"  ></a>
+                            <figcaption>illustration isInt</figcaption>
+                        </figure>
+                </td>
+                <td>
+                    <p><strong>countLines</strong> : Count the number of lines in a file.</p>
+                    <figure>
+                        <a href="images/countLine.png" target="_blank"><img src="images/countLine.png"
+                            alt="Illustration countLines"  ></a>
+                        <figcaption>illustration countLines</figcaption>
+                    </figure>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p><strong>getWordByNumLine</strong> : Return the word with the numLine in the dictionary file.</p>
+                        <figure>
+                            <a href="images/getWord.png" target="_blank"><img src="images/getWord.png"
+                                alt="Illustration getWordByNumLine"  ></a>
+                            <figcaption>illustration getWordByNumLine</figcaption>
+                        </figure>
+                </td>
+                <td>
+                    <p><strong>getRandomNumber</strong> : Get a random int between 1 and max, even though max is greater than RAND_MAX. We did this function because sometimes RANDMAX is too short.</p>
+                    <figure>
+                        <a href="images/getRandom.png" target="_blank"><img src="images/getRandom.png"
+                            alt="Illustration getRandomNumber"  ></a>
+                        <figcaption>illustration getRandomNumber</figcaption>
+                    </figure>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p><strong>containsSpaces</strong> : Verify if the string contains spaces.</p>
+                    <figure>
+                        <a href="images/containSpace.png" target="_blank"><img src="images/containSpace.png"
+                            alt="Illustration containsSpaces"  ></a>
+                        <figcaption>illustration containsSpaces</figcaption>
+                    </figure>
+                </td>
+                <td>
+                    <p><strong>_isAlpha</strong> : Verify if the char is a letter.</p>
+                    <figure>
+                        <a href="images/isAlphe.png" target="_blank"><img src="images/isAlphe.png"
+                            alt="Illustration _isAlpha"  ></a>
+                        <figcaption>illustration _isAlpha</figcaption>
+                    </figure>
+                </td>
+            </tr>
+        </table>
+        <div class="difficulty">
+            <p>
+                We had to do a function for the random number because the constant <strong> rand_max </strong> is sometimes too small (~ 32000) on certain systems. Now we make sure that the random number will be large enough for the dictionary.
+            </p>
+            <p>
+                All of these functions were easy to implement.
+            </p>
+        </div>
+        <h2 id="makefile">Makefile</h2>
+            <p> We immediately realized that doing the makefile would be very quickly necessary. So we chose to do so in the start in order to save time. </p>
+            <p>
+                We first made a minimum version of the makefile, and we improved later.
+            </p>
         <h2 id="server">Server Program</h2>
         <p>We then made the generic server. We had to do various initializations such as verifying that the server is
             not already running by testing the presence of the <strong>/tmp/game_server.pid</strong> file, creating it
@@ -112,84 +263,228 @@
             So we create a child process, which will overlap later with the game on the server side.
             In the child, we retrieve information such as the arguments of the game and the pid of the client who woke
             us up. We also need to create named pipes for communication between processes.</p>
-        <p>Once the pipes have been created, we tell the client that this step is done and we wake him up with the sending of sigUSR1.</p>
+        <p>Once the pipes have been created, we tell the client that this step is done and we wake him up with the
+            sending of sigUSR1.</p>
 
         <p>We just have to do the dup() and run the game on the server side.</p>
-        <p><strong>This diagram summarizes the actions performed by the server:</strong></p>
+        <p><strong>This diagram summarizes the actions performed by the server :</strong></p>
         <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
         <script>
-            mermaid.initialize({    "startOnLoad": true,
-                                    "sequence": {
-                                        "height": 40,
-                                        "actorMargin": 80,
-                                        "mirrorActors": false,
-                                        "bottomMarginAdj": 1
-                                    },  
-                                    "theme": "forest",
-                                    "themeCSS": ".node rect { fill: red; }" 
-                                });
+            mermaid.initialize({
+                "startOnLoad": true,
+                "sequence": {
+                    "height": 40,
+                    "actorMargin": 80,
+                    "mirrorActors": false,
+                    "bottomMarginAdj": 1
+                },
+                "theme": "forest",
+                "themeCSS": ".node rect { fill: red; }"
+            });
         </script>
 
-        <div class="mermaid activity_serv">
-            flowchart TB
-            A[Start] --> B{Server already launched?}
-            B -->|yes| C[Exit]
-            B -->|no| D[Put handlers]
-            D --> E[Create PID File]
-            E --> F[Write PID in File]
-            F --> G{FIFO already created ?}
-            G -->|yes| H{continue}
-            G -->|no| G1[Create PID File]
-            G1 --> H
-            H --> I{Game folder alreay created ?}
-            I -->|no| J[Create folder]
-            I -->|yes| K{continue}
-            J --> K{continue}
-            K --> L[Put USR1handler]
-            L --> M{continue}
-            M --> N{USR1 receive ?}
-            N -->|yes| O[Open the FIFO]
-            N -->|no| M
-            O --> P[Read Client PID]
-            P --> Q[Read Name of Game]
-            Q --> R[Make GamePath]
-            R --> S{Game exist and executable ?}
-            S -->|no| M
-            S -->|yes| T[Fork]
-            T --> U[Read arguments]
-            T --> M
-            subgraph child
-            U --> V[Add server PID to arguments]
-            V --> W[Make FIFOs]
-            W --> X[Send USR1 to client]
-            X --> Y[Duplicate fd]
-            Y --> Z[Exec game_serv]
-            end
+        <figure>
+            <div class="mermaid activity_serv">
+                flowchart TB
+                A[Start] --> B{Server already launched?}
+                B -->|yes| C[Exit]
+                B -->|no| D[Put handlers]
+                D --> E[Create PID File]
+                E --> F[Write PID in File]
+                F --> G{FIFO already created ?}
+                G -->|yes| H{continue}
+                G -->|no| G1[Create PID File]
+                G1 --> H
+                H --> I{Game folder alreay created ?}
+                I -->|no| J[Create folder]
+                I -->|yes| K{continue}
+                J --> K{continue}
+                K --> L[Put USR1handler]
+                L --> M{continue}
+                M --> N{USR1 receive ?}
+                N -->|yes| O[Open the FIFO]
+                N -->|no| M
+                O --> P[Read Client PID]
+                P --> Q[Read Name of Game]
+                Q --> R[Make GamePath]
+                R --> S{Game exist and executable ?}
+                S -->|no| M
+                S -->|yes| T[Fork]
+                T --> U[Read arguments]
+                T --> M
+                subgraph child
+                U --> V[Add server PID to arguments]
+                V --> W[Make FIFOs]
+                W --> X[Send USR1 to client]
+                X --> Y[Duplicate fd]
+                Y --> Z[Exec game_serv]
+                end
+            </div>
+            <figcaption>Diagram of the working of server</figcaption>
+        </figure>
+        <div class="difficulty">
+            <p> The creation of pipes before recovery posed some problem for us. Indeed, duplication went wrong. We had
+                reversed the parameters and we took a long time to realize it. </p>
+            <p> Testing all system calls was also a bit long. </p>
+            <p> It took a long time to correct Valgrind's errors for the realization of memory of the argument table.
+            </p>
         </div>
-        <h2>Client program</h2>
-        <div class="mermaid activity_serv">
-            flowchart TB
-            A[start] --> B[Block SigUSR1]
-            B --> C[verify arguments]
-            C --> D{Game exist and is executable ?}
-            D -->|no| E[exit]
-            D -->|yes| F[Open and read pid of server]
-            F --> G[Set up Handler for USR1 & USR2]
-            G --> H[Wake up the server]
-            H --> I[Open the fifo]
-            I --> J[Send pid of client to server]
-            J --> K[Send name of game to server]
-            K --> L[Send arguments to server]
-            L --> M{continue}
-            M --> N{SIGUS1 received ?}
-            N -->|no| M
-            N -->|yes| O[Create Path of fifos]
-            O --> P[Open the fifos]
-            P --> Q[Duplicate the files descriptors]
-            Q --> R[Create gamePath]
-            R --> S[Exec game_cli]
+        <h2 id="client">Client program</h2>
+        <p>For the generic client, we have duborded to verify the validity of arguments.Then test if the game exists and
+            is executable.We recover the PID that the server wrote in the /tmp/game_server.pid file. We must then set up
+            the handlers of the Sigusr1 & Sigusr2 signals.</p>
+        <p>The client send his PID, the game name and the arguments to the server by the FIFO.</p>
+        <p> The client must at some point break down, because he must wait until the server has created the fifos, to be
+            able to duplicate the descriptors files.However, the processes that run client and server programs are
+            running out in competition.We cannot therefore use the break function because the client program may not
+            receive the SIGUSR1 signal in time.We finally succeeded in the implementation of the solution offered in the
+            blocked and using <strong> sigprocmask () </strong>.At the start we used the fans <strong> Pause ()
+            </strong>, but when using Valgring, the program never woken up. </p>
+            <p><strong>This diagram summarizes the actions performed by the client :</strong></p>
+            <figure>
+                <div class="mermaid activity_serv">
+                    flowchart TB
+                    A[start] --> B[Block SigUSR1]
+                    B --> C[verify arguments]
+                    C --> D{Game exist and is executable ?}
+                    D -->|no| E[exit]
+                    D -->|yes| F[Open and read pid of server]
+                    F --> G[Set up Handler for USR1 & USR2]
+                    G --> H[Wake up the server]
+                    H --> I[Open the fifo]
+                    I --> J[Send pid of client to server]
+                    J --> K[Send name of game to server]
+                    K --> L[Send arguments to server]
+                    L --> M{continue}
+                    M --> N{SIGUS1 received ?}
+                    N -->|no| M
+                    N -->|yes| O[Create Path of fifos]
+                    O --> P[Open the fifos]
+                    P --> Q[Duplicate the files descriptors]
+                    Q --> R[Create gamePath]
+                    R --> S[Exec game_cli]
+                </div>
+                <figcaption>Diagram of the working of client</figcaption>
+            </figure>
+            <div class="difficulty">
+                <p>The hardest part for the client at this point was really pausing and waking up the client, using <strong>sigprocmask()</strong> and <strong>sigsuspend()</strong>. We did not understand the expected operation but with the help of a friend we ended up understanding.</p>
+                <p>The second problem we encountered at this time was with the <strong>dup2()</strong> function. This didn't work, but with the return tests and the <strong>ERRNO</strong> variable, we finally got away with it.</p>
+            </div>
+        <h2 id="hangman">hangman</h2>
+        <p>
+            There are several subtlety in the Hangman game that we had not understood at the start. However, it was not too hard to realize it. We have chosen (and it was imposed in the subject) that the client would really have much to do, if not the user's entry. It is therefore the server that will all work.
+        </p>
+        <p>
+            We have chosen to store the important parameters and characters in constants in order to be able to quickly.
+        </p>
+        <figure>
+            <img src="images/define.png" alt="Illustration define">
+            <figcaption>Illustration of all define</figcaption>
+        </figure>
+        <p>
+            In order to be able to group all the variables useful to the game itself, we have chosen to make a <strong> game </strong> structure.This allows us to manage the game from a single variable and to be able to make free more easily.
+        </p>
+        <figure>
+            <img src="images/game.png" alt="Illustration of struct game">
+            <figcaption>Illustration of the struct game.</figcaption>
+        </figure>
+        <p>
+            So we first controlled the arguments transmitted to Hangman_Serv from the Server. Then we pull a word at random in the dictionary, and finally the game and communication phase with the client. Since the Libmessage libraries was well functional, we have successfully completed communication between the two programs.
+        </p>
+        <p>
+            We had to establish a strict protocol of communication between the two programs. It was the development phase of development. To see the protocol, it's <a href="comm.html"> <strong> here </strong> </a>. The most complicated was to put an end to the client side loop, when an end of the game is detected on the server side.
+        </p>
+        <p> We also had to manage the event safeguarding the result by the player in the event of a victory. </p>
+        <p><strong>Here is a diagram very simply summarizing the operation of Hangman_Serv:</strong></p>
+        <figure>
+            <div class="mermaid activity_serv">
+                flowchart TB
+                A[Set up handlers] --> B[SendPID to client]
+                B --> C{arguments is valid ?}
+                C -->|no| D[Exit]
+                C -->|yes| E[Get number of word in dictionnary]
+                E --> F[Choose a word in dictionnary]
+                F --> G[Init the game]
+                G --> H[Send strings to client]
+                H --> I[Set up handler for sigALRM]
+                I --> J{continue}
+                J --> K[Send word to client]
+                K --> L{continue}
+                L --> M[Get answer]
+                M --> N[char is valid ?]
+                N -->|no| L
+                N -->|yes| O[inform player if good letter]
+                O --> P{Game end ?}
+                P -->|no| J
+                P -->|yes| Q[Inform result of the game]
+                Q --> R{Player want save result ?}
+                R -->|yes| S[Save result]
+                S --> T[exit]
+                R-->|no| T
+            </div>
+            <figcaption>Diagram of hangman_serv</figcaption>
+        </figure>
+        <p> The functioning of Hangman_Cli is almost the same. But waiting for him to put an end to the loop waiting for confirmation of the server if he has to continue or not.It is done with the <strong> Send_int () function </strong>, which we use as a Boolean. </p>
+        <p>
+            In order to manage the user's response time, we have chosen to do this on the server side, and with the <strong> alarm () function </strong>.This required us to redefine the Handler of Sigalrm, so that it does not end the program.We will talk about signals in a dedicated section.
+        </p>
+        <p>
+            It has been realized that we would have to send signals from one to the other, we had to think about a way to know everywhere the PIDs of each. We therefore had to modify the Server program to add the client's PID to the arguments transmitted.Then in Hangman_Serv we sent his PID with the fonction<strong> Send_int </strong>.
+        </p>
+        <figure>
+            <img src="images/realloc.png" alt="Illustration of add pid to arguments">
+            <figcaption>Illustration of add pid to arguments</figcaption>
+        </figure>
+        <div class="difficulty">
+            <p> The game itself is not difficult to implement.It was necessary to be rigorous on the communication between the two processes. </p>
+            <p> We immediately made the right choices of implementation and that made it easier for us.The hardest part was to agree on the communication protocol. </p>
+            <p> We had problems with the Stdin buffer, which we had to empty manue after each user input.This one was a problem for us because it contained carcters and made us begging the program.It took us for some time to realize the Probme and be able to bring a solution. </p>
+            <p> A second problem encountered is the fact that because of recovery, it is difficult to test Valgrind.We are obliged to modify the Execs in the generic programs. </p>
+            <p> The Realloc function posed a lot of problems with Valgrind.</p>
         </div>
+        <h2 id="end_process">End of process management</h2>
+        <p> The last big game that we had at this time and that we had not yet managed is the end of the processes.Now when the user who is in progress, or for example an error intervenes at the level of the generic server. </p>
+        <p> It is then obvious that if one of the programs interromt, then he must notify the other.All this is managed with the management of signals, and handlers.In order to simplify your life, we have created functions for each program allowing free () all the data allocated to the job, so we have put these variables in global ways. </p>
+        <p> For the generic server, we put the same handler for the signals <strong> SIGINT, SIGTERM and SIGQUIT </strong>.This one calls <strong> all_destroy () </strong> and recovers the termination status of each of his childs. So we had to block the SIGCHILD signal in this handler</p>
+        <figure>
+            <img src="images/handInt.png" alt="Illustration of sigINT">
+            <figcaption>Illustration of sigINT</figcaption>
+        </figure>
+        <p>Still in the generic server, we had to set up a handler for SIGCHILD, in order to recover and display the ending of each son.</p>
+        <figure>
+            <img src="images/handchild.png" alt="Illustration of sigCHILD">
+            <figcaption>Illustration of sigCHILD</figcaption>
+        </figure>
+        <p>In Hangman_Serv, the reception of an arret signal causes the sending of SIGUSR2 to Hangman_Cli.Indeed if one of the two ends, the other must know it to stop also and thus not be pending infinitely.</p>
+        <figure>
+            <img src="images/handlerInthangman.png" alt="Illustration of sigInt in hangman_serv">
+            <figcaption>Illustration of sigInt in hangman_serv</figcaption>
+        </figure>
+        <p>We had to do exactly the same on the side of Hangman_Cli.We had to put in place the handler for SIGALRM. </p>
+        <p> So we finished with the management of the end of the processes.</p>
+        <div class="difficulty">
+            <p> Thinking about all cases of figures is a difficult exercise.However, we think we have thought of all the cases requested.We did not have too much difficulties, because knowing the PIDs of each process in each process, the communication was easy. </p>
+            <p> It was a little difficult to pay attention to each variable so as not to make a memory leak. </p>
+        </div>
+        <h2 id="tree">Improved makefile and tree structure of the project.</h2>
+        <p> At the end of the project, we decided to improve the Makefile in order to de factor the lines, and to put the compilation units in variables to be able to modify them easily. </p>
+        <p> We decided to organize the project file in a readable way.We made a source file and an out file.The OUT file is only present after the Make command.In each of these files, there is a game file, in which the games are stored, a Libs file, in which the libraries are stored.At the root of these files is the generic client and the generic server. </p>
+        <figure>
+            <img src="images/tree.png" alt="Illustration of tree structure">
+            <figcaption>Illustration of tree structure</figcaption>
+        </figure>
+        <figure>
+            <img id="make_img" src="images/makefile.png" alt="Illustration of extract of Makefile">
+            <figcaption>Part of Makefile</figcaption>
+        </figure>
+        <div class="difficulty">
+            <p>There are things in the makefile that we have not managed to de factorize.It doesn't work and we had to give up.But if not overall we have not encountered other problems.</p>
+        </div>
+        <h2 id="conclusion">Conclusion</h2>
+        <p>To conclude, this project was the most complex project we had to do so far, but not insurmountable. The good distribution of tasks and the good synergy of our team meant that we succeeded and quite quickly. This project was interesting from the subject and from the number of concepts it includes. We encountered some difficulties but we finally succeeded.</p>
+        <p>We decided not to do the bonus version, not for lack of time but we went to the projects of other subjects. We were aware of the time represented by the web project.</p>
+        <p>We had fun carrying out this project as well as making this website. This website still ended up taking a few hours to complete, but we found it more interesting than doing a simple README. We hope you will at least read it. We decided to make more diagrams in order to make a complete and more understandable report.</p>
     </main>
 </body>
-
+<script src="script/script.js"></script>
 </html>
