@@ -140,6 +140,10 @@ a {
 }
 
 /*------------------------------------------------------------------*/
+html{
+    scroll-behavior: smooth;
+}
+
 body {
     /* background: rgb(2,0,36);
     background: linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(21,21,168,1) 82%); */
@@ -170,7 +174,7 @@ main {
     color: #231942;
     font-family: 'Roboto', sans-serif;
     font-size: 20px;
-
+    /* min-height: 100vh; */
 }
 
 nav {
@@ -206,11 +210,11 @@ nav ul.large a:hover {
     color: #231942;
 }
 
-nav ul.large li#currentPage {
+nav ul.large li.currentPage {
     background-color: #231942;
 }
 
-nav ul.large li#currentPage a {
+nav ul.large li.currentPage a {
     color: white;
     font-weight: bold;
     pointer-events: none;
@@ -400,10 +404,14 @@ figure img#make_img{
     max-width: 800px;
 }
 
+a#return_begin{
+    display: none;
+}
+
 a#return_begin span{
     position: fixed;
-    bottom: 10px;
-    left:10px;
+    bottom: 20px;
+    left:20px;
     right: auto;
     top: auto;
     padding: 10px;
@@ -446,6 +454,21 @@ div#hamburger {
     display: none;
 }
 
+a#git{
+    color: blue;
+}
+
+a#git:hover{
+    text-decoration: underline;
+}
+
+span#signature{
+    display: block;
+    text-align: right;
+    font-family: 'Dancing Script', cursive;
+    font-weight: bold;
+    margin: 50px;
+}
 
 
 @media only screen and (max-width: 1000px) {
@@ -473,7 +496,7 @@ div#hamburger {
         list-style: none;
     }
 
-    #submenu ul li:hover:not(#currentPage) {
+    #submenu ul li:hover:not(.currentPage) {
         transform: translateX(50px);
     }
 
@@ -481,7 +504,7 @@ div#hamburger {
         color: #5e548e;
     }
 
-    #submenu ul li#currentPage a {
+    #submenu ul li.currentPage a {
         color: red;
     }
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,15 +16,15 @@
     <title>Présentation Projet</title>
 </head>
 
-<body>
+<body id="begin">
     <main>
         <nav id="nav">
             <ul class="large">
                 <li> <a href="../README.html">Presentation of the project.</a></li>
                 <li><a href="comm.html">Communications Diagram</a></li>
-                <li id="currentPage"><a href="bilan.html">Conclusion/Bilan</a></li>
-                <li><a href="">Possible improvement</a></li>
-                <li><a href="">About our pair</a></li>
+                <li class="currentPage"><a href="bilan.html">Conclusion/Bilan</a></li>
+                <li><a href="improve.html">Possible improvement</a></li>
+                <li><a href="pair.html">About our pair</a></li>
             </ul>
             <div id="hamburger">
                 <div></div>
@@ -35,12 +35,12 @@
                 <ul>
                     <li> <a href="../README.html">Presentation of the project.</a></li>
                     <li><a href="comm.html">Communications Diagram</a></li>
-                    <li id="currentPage"><a href="bilan.html">Conclusion/Bilan</a></li>
-                    <li><a href="">Possible improvement</a></li>
-                    <li><a href="">About our pair</a></li>
+                    <li class="currentPage"><a href="bilan.html">Conclusion/Bilan</a></li>
+                    <li><a href="improve.html">Possible improvement</a></li>
+                    <li><a href="pair.html">About our pair</a></li>
                 </ul>
             </div>
-            <a id="return_begin" href="bilan.html"><span>Return begin</span></a>
+            <a id="return_begin" href="bilan.html#begin"><span>Return begin</span></a>
         </nav>
         <div class="clear"></div>
         <h1>Assessment and conclusion of the work carried out</h1>
@@ -51,7 +51,7 @@
             and the solutions provided.
         </p>
         <p><strong>The summary shows chronologically the steps that were necessary to complete the project.</strong></p>
-        <section class="index">
+        <div class="index">
             <p><strong>Contents :</strong></p>
             <ul>
                 <li><a href="bilan.html#libmessage">libmessage.so</a></li>
@@ -64,7 +64,7 @@
                 <li><a href="bilan.html#tree">Improved makefile and tree structure of the project.</a></li>
                 <li><a href="bilan.html#conclusion">Conclusion</a></li>
             </ul>
-        </section>
+        </div>
         <h2 id="libmessage">libmessage.so</h2>
         <p>In the subject, he asked us to make a dynamic library in which will be grouped the functions allowing
             communication between two processes, through a file descriptor. This library will notably allow us to make
@@ -268,7 +268,7 @@
 
         <p>We just have to do the dup() and run the game on the server side.</p>
         <p><strong>This diagram summarizes the actions performed by the server :</strong></p>
-        <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+        <script src="script/mermaid.js"></script>
         <script>
             mermaid.initialize({
                 "startOnLoad": true,
@@ -375,7 +375,7 @@
             There are several subtlety in the Hangman game that we had not understood at the start. However, it was not too hard to realize it. We have chosen (and it was imposed in the subject) that the client would really have much to do, if not the user's entry. It is therefore the server that will all work.
         </p>
         <p>
-            We have chosen to store the important parameters and characters in constants in order to be able to quickly.
+            We have chosen to store the important parameters and characters in constants in order to be able to quickly change.
         </p>
         <figure>
             <img src="images/define.png" alt="Illustration define">
@@ -424,7 +424,7 @@
             </div>
             <figcaption>Diagram of hangman_serv</figcaption>
         </figure>
-        <p> The functioning of Hangman_Cli is almost the same. But waiting for him to put an end to the loop waiting for confirmation of the server if he has to continue or not.It is done with the <strong> Send_int () function </strong>, which we use as a Boolean. </p>
+        <p> The functioning of Hangman_Cli is almost the same. But waiting for him to put an end to the loop waiting for confirmation of the server if he has to continue or not. It is done with the <strong> Send_int () function </strong>, which we use as a Boolean. </p>
         <p>
             In order to manage the user's response time, we have chosen to do this on the server side, and with the <strong> alarm () function </strong>.This required us to redefine the Handler of Sigalrm, so that it does not end the program.We will talk about signals in a dedicated section.
         </p>
@@ -485,6 +485,6 @@
         <p>We decided not to do the bonus version, not for lack of time but we went to the projects of other subjects. We were aware of the time represented by the web project.</p>
         <p>We had fun carrying out this project as well as making this website. This website still ended up taking a few hours to complete, but we found it more interesting than doing a simple README. We hope you will at least read it. We decided to make more diagrams in order to make a complete and more understandable report.</p>
     </main>
+    <script src="script/script.js"></script>
 </body>
-<script src="script/script.js"></script>
 </html>

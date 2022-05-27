@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,15 +11,15 @@
     <title>Présentation Projet</title>
 </head>
 
-<body>
+<body id="begin">
     <main>
         <nav>
             <ul class="large">
-                <li id="currentPage"> <a href="README.html#presentation">Presentation of the project.</a></li>
+                <li class="currentPage"> <a href="README.html#presentation">Presentation of the project.</a></li>
                 <li><a href="README/comm.html">Communications Diagram</a></li>
                 <li><a href="README/bilan.html">Conclusion/Bilan</a></li>
-                <li><a href="README.html#improvement">Possible improvement</a></li>
-                <li><a href="README.html#improvement">About our pair</a></li>
+                <li><a href="README/improve.html">Possible improvement</a></li>
+                <li><a href="README/pair.html">About our pair</a></li>
             </ul>
             <div id="hamburger">
                 <div></div>
@@ -29,14 +28,15 @@
             </div>
             <div id="submenu">
                 <ul>
-                    <li id="currentPage"> <a href="README.html#presentation">Presentation of the project.</a></li>
+                    <li class="currentPage"> <a href="README.html#presentation">Presentation of the project.</a></li>
                     <li><a href="README/comm.html">Communications Diagram</a></li>
                     <li><a href="README/bilan.html">Conclusion/Bilan</a></li>
-                    <li><a href="README.html#improvement">Possible improvement</a></li>
-                    <li><a href="README.html#improvement">About our pair</a></li>
+                    <li><a href="README/improve.html">Possible improvement</a></li>
+                    <li><a href="README/pair.html">About our pair</a></li>
                 </ul>
             </div>
         </nav>
+        <a id="return_begin" href="README.html#begin"><span>Return begin</span></a>
         <div class="clear"></div>
         <h1>PROJECT SUBJECT</h1>
         <p>
@@ -58,7 +58,7 @@
         <img class="presentation" src="README/images/exemple_client.png" alt="exemple client">
         <img class="presentation" src="README/images/exemple_server.png" alt="exemple server">
         <p>
-            After verifying the existence of the program &lt;game&gt;_cli, the customer program sends to the Server
+            After verifying the existence of the program &lt;game&gt;_cli, the client program sends to the Server
             program:
         </p>
         <ul>
@@ -73,7 +73,7 @@
             where &lt;pid&gt; is the PID of the process running the client program.
         </p>
         <p>
-            These 2 named tubes must be created on the server side because the customer program
+            These 2 named tubes must be created on the server side because the client program
             Maybe interrupted at any time by the player.Likewise, they will be deleted
             server side at the end of the game.
         </p>
@@ -85,7 +85,7 @@
             overlaps to run the &lt;game&gt;_serv program.
         </p>
         <p>
-            Customer side, after opening the other two ends of the named tubes
+            Client side, after opening the other two ends of the named tubes
             /tmp/game_server/cli&lt;pid&gt;_0.fifo and /tmp/game_server/cli&lt;pid&gt;_1.fifo,
             the process overlaps to run the &lt;game&gt;_cli program.
         </p>
@@ -103,7 +103,7 @@
                 <ul>
                     <li>The server sends SIGUSR1 to the client to indicate that the 2 pipes
                         named /tmp/game_server/cli&lt;pid&gt;_&lt;x&gt;.fifo have been created;
-                        the customer will be able to open them and cover himself; the party will be able to
+                        the client will be able to open them and cover himself; the party will be able to
                         unroll
                     </li>
                     <li>
@@ -128,6 +128,6 @@
             wins if he manages to guess the word with a lower or equal number of errors
             the number of errors allowed.</p>
     </main>
+    <script src="README/script/script.js"></script>
 </body>
-<script src="README/script/script.js"></script>
 </html>

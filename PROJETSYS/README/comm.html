@@ -12,15 +12,15 @@
     <title>Présentation Projet</title>
 </head>
 
-<body>
+<body  id="begin">
     <main>
         <nav>
             <ul class="large">
                 <li><a href="../README.html">Presentation of the project.</a></li>
-                <li id="currentPage"><a href="comm.html">Communications Diagram</a></li>
+                <li class="currentPage"><a href="comm.html">Communications Diagram</a></li>
                 <li><a href="bilan.html">Conclusion/Bilan</a></li>
-                <li><a href="README.html#improvement">Possible improvement</a></li>
-                <li><a href="README.html#improvement">About our pair</a></li>
+                <li><a href="improve.html">Possible improvement</a></li>
+                <li><a href="pair.html">About our pair</a></li>
             </ul>
             <div id="hamburger">
                 <div></div>
@@ -30,12 +30,13 @@
             <div id="submenu">
                 <ul>
                     <li><a href="../README.html">Presentation of the project.</a></li>
-                    <li id="currentPage"><a href="comm.html">Communications Diagram</a></li>
+                    <li class="currentPage"><a href="comm.html">Communications Diagram</a></li>
                     <li><a href="bilan.html">Conclusion/Bilan</a></li>
-                    <li><a href="README.html#improvement">Possible improvement</a></li>
-                    <li><a href="README.html#improvement">About our pair</a></li>
+                    <li><a href="improve.html">Possible improvement</a></li>
+                    <li><a href="pair.html">About our pair</a></li>
                 </ul>
             </div>
+            <a id="return_begin" href="comm.html#begin"><span>Return begin</span></a>
         </nav>
         <div class="clear"></div>
         <h1>THE COMMUNICATION BETWEEN HANGMAN_SERV & HANGMAN_CLI</h1>
@@ -50,7 +51,7 @@
             to have the functions necessary for communication.
         </p>
         <h2>hangman_serv/hangman_cli communication sequence diagram</h2>
-        <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+        <script src="script/mermaid.js"></script>
         <script>
             mermaid.initialize({    "startOnLoad": true,
                                     "sequence": {
@@ -152,7 +153,8 @@
                         S ->> S : Exit
                     end
                 end
+        </div>
     </main>
+    <script src="script/script.js"></script>
 </body>
-<script src="script/script.js"></script>
 </html>

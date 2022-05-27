@@ -1,6 +1,7 @@
 var hum = document.getElementById("hamburger");
 var submenu = document.getElementById("submenu");
 var nav = document.getElementById("nav")
+var return_begin = document.getElementById("return_begin");
 
 var bol = false;
 
@@ -18,4 +19,13 @@ hum.addEventListener('click', event =>{
         bol = false;
     }
 });
+
+document.addEventListener("scroll", () => {
+    if (window.scrollY > 1000) {
+        return_begin.style.display = 'block';
+    }else{
+        return_begin.style.display = 'none';
+    }
+});
+
 
