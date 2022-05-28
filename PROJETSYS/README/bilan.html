@@ -445,7 +445,7 @@
         <h2 id="end_process">End of process management</h2>
         <p> The last big game that we had at this time and that we had not yet managed is the end of the processes.Now when the user who is in progress, or for example an error intervenes at the level of the generic server. </p>
         <p> It is then obvious that if one of the programs interromt, then he must notify the other.All this is managed with the management of signals, and handlers.In order to simplify your life, we have created functions for each program allowing free () all the data allocated to the job, so we have put these variables in global ways. </p>
-        <p> For the generic server, we put the same handler for the signals <strong> SIGINT, SIGTERM and SIGQUIT </strong>.This one calls <strong> all_destroy () </strong> and recovers the termination status of each of his childs. So we had to block the SIGCHILD signal in this handler</p>
+        <p> For the generic server, we put the same handler for the signals <strong> SIGINT, SIGTERM and SIGQUIT </strong>. A signal SIGINT is sent to each son, in order to finish them all. This one calls <strong> all_destroy () </strong> and recovers the termination status of each of his childs. So we had to block the SIGCHILD signal in this handler. </p>
         <figure>
             <img src="images/handInt.png" alt="Illustration of sigINT">
             <figcaption>Illustration of sigINT</figcaption>

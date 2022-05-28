@@ -23,7 +23,7 @@
 #define MSG_SAVE_FAILED "Bye, save the result failed"
 #define MSG_ENTER_PSEUDO "Enter your pseudo : "
 #define MSG_ENTER_PSEUDO_ERROR "Error : the pseudo is too short, too long, or it contains space(s)"
-#define TIMER 10 //The maximum time the player must take to respond
+#define TIMER 1000 //The maximum time the player must take to respond
 #define ERROR_CODE_COMM  63
 #define STD_IN 0
 #define STD_OUT 1 

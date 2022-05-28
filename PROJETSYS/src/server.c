@@ -56,6 +56,7 @@ void handSIGUSR1(int sig) {
  *  and displays their status
  */
 void handSIGINT(int sig){
+    kill(0, SIGINT); //kill all child processes
     //block SIGCHLD
     sigset_t mask;
     sigemptyset(&mask);

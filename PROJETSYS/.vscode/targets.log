@@ -1,0 +1,481 @@
+make all --print-data-base --no-builtin-variables --no-builtin-rules --question
+# GNU Make 4.3
+# Built for x86_64-pc-linux-gnu
+# Copyright (C) 1988-2020 Free Software Foundation, Inc.
+# License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+# This is free software: you are free to change and redistribute it.
+# There is NO WARRANTY, to the extent permitted by law.
+
+# Make data base, printed on Sat May 28 15:23:06 2022
+
+# Variables
+
+# environment
+GDK_BACKEND = x11
+# environment
+LC_ALL = C
+# environment
+NO_AT_BRIDGE = 1
+# environment
+GTK_RC_FILES = /etc/gtk/gtkrc:/home/thomas/.gtkrc:/home/thomas/.config/gtkrc
+# makefile (from 'Makefile', line 6)
+PATH_GAME_SRC = ${PATH_SRC}/game
+# environment
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-a8d377e8-7639-4d8c-95b2-ebc7a15fd5a8.sock
+# environment
+VSCODE_CWD = /home/thomas
+# makefile (from 'Makefile', line 3)
+PATH_LIB_OUT = ${PATH_OUT}/${PATH_LIBS}
+# default
+MAKE_COMMAND := make
+# makefile (from 'Makefile', line 1)
+PATH_OUT = ./out
+# automatic
+@D = $(patsubst %/,%,$(dir $@))
+# environment
+VSCODE_HANDLES_UNCAUGHT_ERRORS = true
+# default
+.VARIABLES := 
+# environment
+PWD = /home/thomas/Documents/Cours_fac/PROJET/PROJETSYS
+# automatic
+%D = $(patsubst %/,%,$(dir $%))
+# environment
+MAIL = /var/spool/mail/thomas
+# environment
+OLDPWD = /home/thomas
+# automatic
+^D = $(patsubst %/,%,$(dir $^))
+# environment
+VSCODE_LOG_STACK = false
+# automatic
+%F = $(notdir $%)
+# environment
+VSCODE_CODE_CACHE_PATH = /home/thomas/.config/Code/CachedData/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5
+# environment
+XDG_SESSION_PATH = /org/freedesktop/DisplayManager/Session1
+# environment
+LANG = C
+# environment
+XAUTHORITY = /home/thomas/.Xauthority
+# default
+.LOADED := 
+# default
+.INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
+# makefile
+MAKEFLAGS = pqrR
+# makefile (from 'Makefile', line 4)
+PATH_SRC = ./src
+# makefile
+CURDIR := /home/thomas/Documents/Cours_fac/PROJET/PROJETSYS
+# environment
+VSCODE_PIPE_LOGGING = true
+# environment
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+# automatic
+*D = $(patsubst %/,%,$(dir $*))
+# environment
+PAM_KWALLET5_LOGIN = /run/user/1000/kwallet5.socket
+# environment
+MFLAGS = -pqrR
+# default
+.SHELLFLAGS := -c
+# environment
+XDG_CONFIG_DIRS = /home/thomas/.config/kdedefaults:/etc/xdg
+# automatic
++D = $(patsubst %/,%,$(dir $+))
+# environment
+XCURSOR_THEME = breeze_cursors
+# environment
+XDG_SESSION_DESKTOP = KDE
+# makefile (from 'Makefile', line 1)
+MAKEFILE_LIST := Makefile
+# automatic
+@F = $(notdir $@)
+# environment
+VSCODE_VERBOSE_LOGGING = true
+# environment
+VSCODE_PID = 83077
+# environment
+XDG_SESSION_TYPE = x11
+# automatic
+?D = $(patsubst %/,%,$(dir $?))
+# environment
+SESSION_MANAGER = local/arch:@/tmp/.ICE-unix/989,unix/arch:/tmp/.ICE-unix/989
+# automatic
+*F = $(notdir $*)
+# environment
+CHROME_DESKTOP = code-url-handler.desktop
+# environment
+DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus
+# automatic
+<D = $(patsubst %/,%,$(dir $<))
+# environment
+VSCODE_NLS_CONFIG = {"locale":"fr","availableLanguages":{"*":"fr"},"_languagePackId":"25fe6a3290ec415596628d4afc87a88c.fr","_translationsConfigFile":"/home/thomas/.config/Code/clp/25fe6a3290ec415596628d4afc87a88c.fr/tcf.json","_cacheRoot":"/home/thomas/.config/Code/clp/25fe6a3290ec415596628d4afc87a88c.fr","_resolvedLanguagePackCoreLocation":"/home/thomas/.config/Code/clp/25fe6a3290ec415596628d4afc87a88c.fr/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5","_corruptedFile":"/home/thomas/.config/Code/clp/25fe6a3290ec415596628d4afc87a88c.fr/corrupted.info","_languagePackSupport":true}
+# default
+MAKE_HOST := x86_64-pc-linux-gnu
+# makefile
+SHELL = /bin/sh
+# default
+MAKECMDGOALS := all
+# environment
+SHLVL = 1
+# makefile (from 'Makefile', line 2)
+PATH_LIBS = libs
+# environment
+MAKELEVEL := 0
+# default
+MAKE = $(MAKE_COMMAND)
+# environment
+PATH = /usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl
+# default
+MAKEFILES := 
+# environment
+LANGUAGE = 
+# environment
+MOTD_SHOWN = pam
+# automatic
+^F = $(notdir $^)
+# environment
+VSCODE_LOG_NATIVE = false
+# automatic
+?F = $(notdir $?)
+# environment
+KDE_APPLICATIONS_AS_SCOPE = 1
+# environment
+XDG_SEAT = seat0
+# environment
+XDG_CURRENT_DESKTOP = KDE
+# automatic
++F = $(notdir $+)
+# environment
+XDG_SEAT_PATH = /org/freedesktop/DisplayManager/Seat0
+# environment
+DESKTOP_SESSION = plasma
+# environment
+ORIGINAL_XDG_CURRENT_DESKTOP = KDE
+# 'override' directive
+GNUMAKEFLAGS := 
+# environment
+LOGNAME = thomas
+# environment
+XDG_VTNR = 1
+# makefile
+.DEFAULT_GOAL := all
+# environment
+SYSTEMD_EXEC_PID = 872
+# environment
+DISPLAY = :0
+# environment
+GTK_MODULES = canberra-gtk-module
+# environment
+USER = thomas
+# default
+MAKE_VERSION := 4.3
+# environment
+KDE_SESSION_UID = 1000
+# makefile (from 'Makefile', line 9)
+LDFLAGS = -g
+# environment
+_ = /usr/bin/make
+# environment
+XDG_RUNTIME_DIR = /run/user/1000
+# makefile (from 'Makefile', line 8)
+CFLAGS = -Wall -std=c99 -g
+# environment
+XDG_SESSION_CLASS = user
+# environment
+VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
+# environment
+GTK2_RC_FILES = /etc/gtk-2.0/gtkrc:/home/thomas/.gtkrc-2.0:/home/thomas/.config/gtkrc-2.0
+# environment
+HOME = /home/thomas
+# environment
+ELECTRON_RUN_AS_NODE = 1
+# environment
+VSCODE_IPC_HOOK = /run/user/1000/vscode-6002357e-1.67.2-main.sock
+# environment
+XDG_SESSION_ID = 2
+# environment
+XCURSOR_SIZE = 24
+# default
+.RECIPEPREFIX := 
+# automatic
+<F = $(notdir $<)
+# default
+SUFFIXES := 
+# environment
+QT_AUTO_SCREEN_SCALE_FACTOR = 0
+# environment
+VSCODE_CLI = 1
+# environment
+ELECTRON_NO_ATTACH_CONSOLE = 1
+# environment
+KDE_SESSION_VERSION = 5
+# default
+.FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync check-symlink guile load
+# makefile (from 'Makefile', line 5)
+PATH_GAME_OUT = ${PATH_OUT}/game
+# makefile (from 'Makefile', line 7)
+CC = gcc
+# environment
+KDE_FULL_SESSION = true
+# variable set hash-table stats:
+# Load=105/1024=10%, Rehash=0, Collisions=3/242=1%
+
+# Pattern-specific Variable Values
+
+# No pattern-specific variable values.
+
+# Directories
+
+# . (device 66311, inode 3539388): 7 files, no impossibilities.
+# src/game (device 66311, inode 3539484): No files, no impossibilities so far.
+
+# 7 files, no impossibilities in 2 directories.
+
+# Implicit Rules
+
+out/game/%.o: src/game/%.c
+#  recipe to execute (from 'Makefile', line 76):
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+# 1 implicit rules, 0 (0.0%) terminal.
+# Files
+
+out/game/hangman_cli: out/game/hangman_cli.o out/libs/libmessage.so out/libs/libprojectUtil.so
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 44):
+	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $< -lmessage -lprojectUtil
+
+# Not a target:
+out/game/test_cli.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+client: out/client.o out/libs/libmessage.so out/libs/libprojectUtil.so
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 30):
+	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $< -lmessage -lprojectUtil
+
+# Not a target:
+src/libs/libmessage/message.h:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+out/libs/libmessage/libmessage.o: src/libs/libmessage/message.c src/libs/libmessage/message.h
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 68):
+	$(CC) $(CFLAGS) -fPIC -c -o $@ $<
+
+# Not a target:
+out/game/test_serv.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+Makefile:
+#  Implicit rule search has been done.
+ 
+#  Last modified 2022-05-27 01:50:56.824418929
+#  File has been updated.
+#  Successfully updated.
+
+out/game/hangman_serv: out/game/hangman_serv.o out/libs/libmessage.so out/libs/libprojectUtil.so
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 41):
+	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $< -lmessage -lprojectUtil
+
+out/game/test_serv: out/game/test_serv.o out/libs/libmessage.so
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 35):
+	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $< -lmessage
+
+out/game/test_cli: out/game/test_cli.o out/libs/libmessage.so
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 38):
+	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $< -lmessage
+
+mrproper:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 82):
+	rm -f client
+	rm -f server
+
+clean:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 79):
+	rm -rf $(PATH_OUT)
+
+out/libs/libprojectUtil.so: out/libs/libprojectUtil/libprojectUtil.o
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 53):
+	$(CC) $(LDFLAGS) -shared -o $(PATH_LIB_OUT)/libprojectUtil.so $(PATH_LIB_OUT)/libprojectUtil/libprojectUtil.o
+
+server: out/server.o out/libs/libmessage.so out/libs/libprojectUtil.so
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 26):
+	$(CC) $(LDFLAGS) -L$(PATH_LIB_OUT) -o $@ $< -lmessage -lprojectUtil
+
+# Not a target:
+src/server.c:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+create_folders:
+#  Implicit rule search has not been done.
+#  Implicit/static pattern stem: ''
+#  File does not exist.
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# automatic
+# @ := create_folders
+# automatic
+# * := 
+# automatic
+# < := 
+# automatic
+# + := 
+# automatic
+# % := 
+# automatic
+# ^ := 
+# automatic
+# ? := 
+# automatic
+# | := 
+# variable set hash-table stats:
+# Load=8/32=25%, Rehash=0, Collisions=1/25=4%
+#  recipe to execute (from 'Makefile', line 17):
+	@mkdir -p ${PATH_LIB_OUT}
+	@mkdir -p ${PATH_LIB_OUT}/libmessage
+	@mkdir -p ${PATH_LIB_OUT}/libprojectUtil
+	@mkdir -p ${PATH_OUT}/game
+	@cp $(PATH_GAME_SRC)/dictionnaire.txt ${PATH_GAME_OUT}/dictionnaire.txt
+
+# Not a target:
+.DEFAULT:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+all: create_folders server client out/game/test_serv out/game/test_cli out/game/hangman_serv out/game/hangman_cli
+#  Command line target.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/17=0%
+
+out/libs/libmessage.so: out/libs/libmessage/libmessage.o
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 49):
+	$(CC) $(LDFLAGS) -shared -o $(PATH_LIB_OUT)/libmessage.so $(PATH_LIB_OUT)/libmessage/libmessage.o
+
+out/libs/libprojectUtil/libprojectUtil.o: src/libs/libprojectUtil/projectUtil.c src/libs/libprojectUtil/projectUtil.h
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 72):
+	$(CC) $(CFLAGS) -fPIC -c -o $@ $<
+
+# Not a target:
+src/libs/libprojectUtil/projectUtil.c:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+src/libs/libmessage/message.c:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+out/game/hangman_serv.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+out/game/hangman_cli.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+src/client.c:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+out/server.o: src/server.c
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 61):
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+out/client.o: src/client.c
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 64):
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+# Not a target:
+.SUFFIXES:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+src/libs/libprojectUtil/projectUtil.h:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# files hash-table stats:
+# Load=29/1024=3%, Rehash=0, Collisions=0/85=0%
+# VPATH Search Paths
+
+# No 'vpath' search paths.
+
+# No general ('VPATH' variable) search path.
+
+# strcache buffers: 1 (0) / strings = 40 / storage = 659 B / avg = 16 B
+# current buf: size = 8162 B / used = 659 B / count = 40 / avg = 16 B
+
+# strcache performance: lookups = 83 / hit rate = 51%
+# hash-table stats:
+# Load=40/8192=0%, Rehash=0, Collisions=0/83=0%
+# Finished Make data base on Sat May 28 15:23:06 2022
+
+ 
